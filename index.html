@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marrakanda — Maison d'hôte · Marrakech</title>
+  <meta name="description" content="Marrakanda, maison d'hôte de luxe à Marrakech. Menu restauration, activités et connexion Wi-Fi — au cœur de la palmeraie.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --clay-100:  #F0D9C8;
+      --clay-300:  #D99C77;
+      --clay:      #BE6B43;
+      --clay-600:  #9A5232;
+      --clay-800:  #6E3920;
+
+      --bordeaux-200: #C98E96;
+      --bordeaux:     #6E2230;
+      --bordeaux-700: #531825;
+      --bordeaux-900: #3A0F18;
+
+      --saffron-200: #EFD49A;
+      --saffron:     #C8962F;
+      --saffron-600: #A2761D;
+
+      --olive:     #67713E;
+      --olive-700: #4A5230;
+
+      --pool:      #2E8FA3;
+      --pool-700:  #1E6675;
+
+      --sand-50:  #FBF6EC;
+      --sand-100: #F5ECDB;
+      --sand-200: #EADCC4;
+      --sand-300: #DCC9A8;
+      --sand-400: #C3AC85;
+      --sand-500: #A38B63;
+      --sand-600: #7E6849;
+      --ink-700:  #4A3B2C;
+      --ink-800:  #33271C;
+      --ink-900:  #211810;
+
+      --f-display: 'Marcellus', 'Times New Roman', serif;
+      --f-serif:   'Cormorant Garamond', Georgia, serif;
+      --f-sans:    'Jost', 'Helvetica Neue', sans-serif;
+
+      --maxw: 1200px;
+      --gap:  20px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--sand-50);
+      color: var(--ink-900);
+      font-family: var(--f-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    img { max-width: 100%; display: block; }
+
+    /* ============================================================
+       LANGUAGE SYSTEM
+    ============================================================ */
+    body.lang-fr .t-en { display: none !important; }
+    body.lang-en .t-fr { display: none !important; }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 72px;
+      padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .45s ease, box-shadow .45s ease;
+    }
+    .nav.scrolled {
+      background: rgba(251, 246, 236, .95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(33, 24, 16, .07);
+    }
+    .nav-brand {
+      font-family: var(--f-display);
+      font-size: 1.05rem; letter-spacing: .28em;
+      text-decoration: none; color: white;
+      transition: color .45s;
+    }
+    .nav.scrolled .nav-brand { color: var(--ink-900); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 40px; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--f-sans); font-size: .67rem;
+      letter-spacing: .2em; text-transform: uppercase; font-weight: 400;
+      color: rgba(255, 255, 255, .82); text-decoration: none;
+      padding-bottom: 2px; border-bottom: 1px solid transparent;
+      transition: color .3s, border-color .3s;
+    }
+    .nav.scrolled .nav-links a { color: var(--ink-700); }
+    .nav-links a:hover { color: white; border-color: rgba(255,255,255,.5); }
+    .nav.scrolled .nav-links a:hover { color: var(--clay); border-color: var(--clay); }
+
+    .lang-btn {
+      font-family: var(--f-sans); font-size: .67rem;
+      letter-spacing: .18em; text-transform: uppercase; font-weight: 400;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.38);
+      color: white; padding: 7px 18px; border-radius: 100px;
+      cursor: pointer; transition: .3s; line-height: 1;
+    }
+    .nav.scrolled .lang-btn {
+      background: transparent;
+      border-color: var(--sand-300);
+      color: var(--ink-700);
+    }
+    .lang-btn:hover { background: rgba(255,255,255,.24); }
+    .nav.scrolled .lang-btn:hover { border-color: var(--clay); color: var(--clay); }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      animation: hero-arrive 2.8s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    @keyframes hero-arrive {
+      from { transform: scale(1.04); }
+      to   { transform: scale(1.0); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        172deg,
+        rgba(33,24,16,.05)  0%,
+        rgba(33,24,16,.0)   28%,
+        rgba(33,24,16,.52)  65%,
+        rgba(33,24,16,.88) 100%
+      );
+    }
+    .hero-grain {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      opacity: .038;
+      mix-blend-mode: overlay;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      width: 100%; max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 128px 48px 104px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 14px;
+      font-family: var(--f-sans); font-size: .64rem;
+      letter-spacing: .38em; text-transform: uppercase; font-weight: 500;
+      color: var(--saffron-200); margin-bottom: 22px;
+      opacity: 0; animation: up .8s .35s both;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 36px; height: 1px;
+      background: var(--saffron-200); opacity: .7; flex-shrink: 0;
+    }
+    .hero-title {
+      font-family: var(--f-display);
+      font-size: clamp(4.5rem, 10vw, 9rem);
+      line-height: .9; letter-spacing: .04em;
+      color: white;
+      opacity: 0; animation: up .9s .5s both;
+    }
+    .hero-sub {
+      font-family: var(--f-serif);
+      font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+      font-style: italic; color: var(--sand-200);
+      max-width: 50ch; margin-top: 20px; line-height: 1.65;
+      opacity: 0; animation: up .8s .68s both;
+    }
+    .hero-ctas {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 40px;
+      opacity: 0; animation: up .8s .84s both;
+    }
+    .btn {
+      font-family: var(--f-sans); font-size: .7rem;
+      letter-spacing: .18em; text-transform: uppercase; font-weight: 400;
+      padding: 15px 34px; border-radius: 100px;
+      border: 1px solid transparent; cursor: pointer;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background .25s, border-color .25s, color .25s, transform .2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-fill   { background: var(--clay); color: white; }
+    .btn-fill:hover { background: var(--clay-600); }
+    .btn-ghost  { background: transparent; color: white; border-color: rgba(255,255,255,.42); }
+    .btn-ghost:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.68); }
+
+    .hero-scroll-cue {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2; display: flex; flex-direction: column;
+      align-items: center; gap: 10px; cursor: pointer;
+      opacity: 0; animation: fade 1s 1.4s both;
+    }
+    .hero-scroll-cue span {
+      font-family: var(--f-sans); font-size: .58rem;
+      letter-spacing: .24em; text-transform: uppercase;
+      color: rgba(255,255,255,.46);
+    }
+    .scroll-bar {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.48), rgba(255,255,255,0));
+      animation: bar-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes bar-pulse {
+      0%, 100% { opacity: .38; transform: scaleY(.75); }
+      50%       { opacity: 1;   transform: scaleY(1);   }
+    }
+
+    /* ============================================================
+       KEYFRAMES
+    ============================================================ */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .rv {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1);
+    }
+    .rv.in { opacity: 1; transform: none; }
+    .rv-d1 { transition-delay: .1s; }
+    .rv-d2 { transition-delay: .2s; }
+    .rv-d3 { transition-delay: .3s; }
+    .rv-d4 { transition-delay: .4s; }
+    .rv-d5 { transition-delay: .5s; }
+
+    /* ============================================================
+       SECTION COMMON
+    ============================================================ */
+    .section { padding: 104px 0; }
+    .section + .section { border-top: 1px solid var(--sand-200); }
+
+    .sec-head { margin-bottom: 68px; }
+    .sec-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--f-sans); font-size: .63rem;
+      letter-spacing: .32em; text-transform: uppercase; font-weight: 500;
+      color: var(--saffron-600); margin-bottom: 16px;
+    }
+    .sec-eyebrow::before, .sec-eyebrow::after {
+      content: '';
+      display: block; width: 22px; height: 1px;
+      background: var(--saffron); opacity: .7; flex-shrink: 0;
+    }
+    .sec-title {
+      font-family: var(--f-display);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: .96; color: var(--ink-900);
+    }
+    .sec-lead {
+      font-family: var(--f-serif);
+      font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+      font-style: italic; color: var(--ink-700);
+      max-width: 54ch; margin-top: 14px; line-height: 1.65;
+    }
+
+    /* ============================================================
+       MENU SECTION
+    ============================================================ */
+    .menu-section {
+      background: linear-gradient(180deg, var(--sand-50) 0%, var(--sand-100) 100%);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--gap);
+    }
+    .cat-card            { grid-column: span 2; }
+    .cat-card:nth-child(4),
+    .cat-card:nth-child(5) { grid-column: span 3; }
+
+    .cat-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(33,24,16,.055), 0 8px 28px rgba(33,24,16,.038);
+      transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s;
+    }
+    .cat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(33,24,16,.1), 0 20px 48px rgba(33,24,16,.07);
+    }
+
+    .cat-head {
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .cat-head-icon {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: rgba(255,255,255,.18);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem;
+    }
+    .cat-head-title {
+      font-family: var(--f-display);
+      font-size: 1.1rem; letter-spacing: .07em;
+      color: white;
+    }
+    .cat-starters .cat-head { background: var(--clay); }
+    .cat-moroccan .cat-head { background: var(--bordeaux); }
+    .cat-western  .cat-head { background: var(--olive-700); }
+    .cat-kids     .cat-head { background: var(--pool-700); }
+    .cat-dessert  .cat-head { background: var(--saffron-600); }
+
+    .cat-items { padding: 6px 24px 18px; list-style: none; }
+    .cat-items li {
+      font-family: var(--f-serif);
+      font-size: 1.06rem; color: var(--ink-800);
+      padding: 9px 0; border-bottom: 1px solid var(--sand-100);
+      line-height: 1.35;
+    }
+    .cat-items li:last-child { border-bottom: none; }
+
+    /* --- TARIFS --- */
+    .tarifs-block {
+      margin-top: 60px;
+      background: var(--bordeaux-900);
+      border-radius: 20px;
+      padding: 56px;
+      color: white;
+    }
+    .tarifs-head { margin-bottom: 36px; }
+    .tarifs-title {
+      font-family: var(--f-display);
+      font-size: 1.8rem; color: var(--saffron-200);
+      margin-bottom: 6px;
+    }
+    .tarifs-sub {
+      font-family: var(--f-serif);
+      font-style: italic; font-size: 1rem;
+      color: rgba(235,220,196,.5);
+    }
+    .tarifs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .tarif-item {
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 22px 20px;
+      transition: background .3s;
+    }
+    .tarif-item:hover { background: rgba(255,255,255,.09); }
+    .tarif-label {
+      font-family: var(--f-sans); font-size: .63rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--saffron-200); line-height: 1.55;
+      margin-bottom: 14px; min-height: 2.5em;
+    }
+    .tarif-price {
+      font-family: var(--f-display);
+      font-size: 2.8rem; line-height: 1;
+      color: white; display: flex; align-items: baseline; gap: 4px;
+    }
+    .tarif-unit {
+      font-family: var(--f-sans); font-size: .82rem;
+      color: var(--sand-400); font-weight: 300;
+    }
+    .tarif-desc {
+      font-family: var(--f-sans); font-size: .72rem;
+      color: var(--sand-500); margin-top: 8px; line-height: 1.5;
+    }
+    .menu-notice {
+      padding: 18px 22px;
+      background: rgba(255,255,255,.05);
+      border-left: 2px solid var(--saffron);
+      border-radius: 0 8px 8px 0;
+      display: flex; flex-direction: column; gap: 7px;
+    }
+    .menu-notice p {
+      font-family: var(--f-sans); font-size: .76rem;
+      color: var(--sand-500); line-height: 1.55;
+    }
+
+    /* ============================================================
+       ACTIVITIES SECTION
+    ============================================================ */
+    .act-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+    .act-card:last-child:nth-child(3n - 2) {
+      grid-column: 2;
+    }
+
+    .act-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(33,24,16,.055);
+      display: flex; flex-direction: column;
+      transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s;
+    }
+    .act-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(33,24,16,.12);
+    }
+    .act-bar { height: 5px; flex-shrink: 0; }
+    .act-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .act-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .act-name {
+      font-family: var(--f-display);
+      font-size: 1.18rem; color: var(--ink-900);
+      margin-bottom: 10px; line-height: 1.2;
+    }
+    .act-desc {
+      font-family: var(--f-serif);
+      font-size: 1rem; font-style: italic;
+      color: var(--ink-700); line-height: 1.6; flex: 1;
+    }
+    .act-footer {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      margin-top: 22px; padding-top: 18px;
+      border-top: 1px solid var(--sand-100);
+    }
+    .act-price {
+      font-family: var(--f-display);
+      font-size: 1.3rem; color: var(--clay);
+    }
+    .act-price-detail {
+      font-family: var(--f-sans); font-size: .69rem;
+      color: var(--sand-500); margin-top: 3px; line-height: 1.4;
+    }
+    .act-duration {
+      font-family: var(--f-sans); font-size: .63rem;
+      letter-spacing: .1em; text-transform: uppercase; font-weight: 400;
+      background: var(--sand-100); color: var(--ink-700);
+      padding: 6px 14px; border-radius: 100px; white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .act-note {
+      margin-top: 52px; text-align: center;
+      font-family: var(--f-serif);
+      font-size: 1.15rem; font-style: italic;
+      color: var(--ink-700);
+    }
+
+    /* ============================================================
+       WIFI SECTION
+    ============================================================ */
+    .wifi-section {
+      background: var(--ink-900);
+      padding: 104px 0;
+      position: relative; overflow: hidden;
+    }
+    .wifi-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 55% at 50% 50%, rgba(110,34,48,.32) 0%, transparent 68%);
+    }
+    .wifi-grain {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      opacity: .04;
+    }
+    .wifi-inner {
+      position: relative; z-index: 1;
+      text-align: center;
+    }
+    .wifi-section .sec-eyebrow {
+      color: var(--saffron-200); justify-content: center;
+    }
+    .wifi-section .sec-eyebrow::before,
+    .wifi-section .sec-eyebrow::after { background: var(--saffron-200); }
+    .wifi-section .sec-title { color: white; }
+    .wifi-section .sec-lead  { color: var(--sand-400); margin: 0 auto; }
+    .wifi-section .sec-head  { margin-bottom: 52px; }
+
+    .wifi-card {
+      max-width: 400px; margin: 0 auto;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 20px;
+      padding: 48px 40px 44px;
+    }
+    .qr-wrap {
+      width: 196px; height: 196px;
+      background: white; border-radius: 12px;
+      margin: 0 auto 28px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px;
+    }
+    .qr-wrap canvas { display: block; }
+    .wifi-ssid {
+      font-family: var(--f-display);
+      font-size: 1.35rem; color: white; margin-bottom: 8px;
+    }
+    .wifi-inst {
+      font-family: var(--f-serif);
+      font-size: 1.02rem; font-style: italic;
+      color: var(--sand-400); margin-bottom: 28px; line-height: 1.6;
+    }
+    .wifi-steps { list-style: none; display: flex; flex-direction: column; gap: 13px; text-align: left; }
+    .wifi-steps li { display: flex; gap: 12px; align-items: flex-start; }
+    .wifi-steps li span:not(.step-n) {
+      font-family: var(--f-sans); font-size: .8rem;
+      color: var(--sand-400); line-height: 1.5;
+    }
+    .step-n {
+      width: 22px; height: 22px; flex-shrink: 0;
+      background: var(--saffron); color: var(--ink-900);
+      font-size: .65rem; font-weight: 600; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: var(--ink-900);
+      border-top: 1px solid rgba(255,255,255,.055);
+      padding: 52px 0;
+    }
+    .footer-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    }
+    .footer-brand {
+      font-family: var(--f-display);
+      font-size: 1.35rem; letter-spacing: .24em; color: white;
+    }
+    .footer-tag {
+      font-family: var(--f-serif);
+      font-style: italic; font-size: .92rem;
+      color: var(--sand-600); margin-top: 5px;
+    }
+    .footer-copy {
+      font-family: var(--f-sans); font-size: .7rem;
+      letter-spacing: .06em; color: var(--sand-600);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .tarifs-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 880px) {
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .cat-card, .cat-card:nth-child(4), .cat-card:nth-child(5) { grid-column: span 1; }
+      .act-grid  { grid-template-columns: repeat(2, 1fr); }
+      .act-card:last-child:nth-child(3n - 2) { grid-column: auto; }
+    }
+    @media (max-width: 600px) {
+      .wrap       { padding: 0 22px; }
+      .nav        { padding: 0 22px; }
+      .nav-links  { display: none; }
+      .hero-content { padding-left: 22px; padding-right: 22px; }
+      .section    { padding: 72px 0; }
+      .menu-grid  { grid-template-columns: 1fr; }
+      .act-grid   { grid-template-columns: 1fr; }
+      .tarifs-block { padding: 32px 24px; }
+      .tarifs-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .wifi-card  { padding: 36px 28px; }
+    }
+  </style>
+</head>
+
+<body class="lang-fr">
+
+  <!-- ============================================================
+       NAV
+  ============================================================ -->
+  <nav class="nav" id="nav">
+    <a href="#top" class="nav-brand">MARRAKANDA</a>
+    <ul class="nav-links">
+      <li>
+        <a href="#menu">
+          <span class="t-fr">Menu</span><span class="t-en">Menu</span>
+        </a>
+      </li>
+      <li>
+        <a href="#activites">
+          <span class="t-fr">Activités</span><span class="t-en">Activities</span>
+        </a>
+      </li>
+      <li>
+        <a href="#wifi">Wi-Fi</a>
+      </li>
+      <li>
+        <button class="lang-btn" id="lang-btn" aria-label="Changer de langue">
+          <span class="t-fr">EN</span><span class="t-en">FR</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="hero" id="top">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+      <source src="../../BN.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-grain"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="t-fr">Marrakech · Maison d'hôte</span>
+        <span class="t-en">Marrakech · Guest House</span>
+      </div>
+
+      <h1 class="hero-title">Marrakanda</h1>
+
+      <p class="hero-sub t-fr">
+        Un jardin de luxe au cœur de la palmeraie —<br>où chaque détail est une invitation à la sérénité.
+      </p>
+      <p class="hero-sub t-en">
+        A luxury garden retreat in the heart of the palm grove —<br>where every detail invites serenity.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#menu" class="btn btn-fill">
+          <span class="t-fr">Découvrir le menu</span>
+          <span class="t-en">Explore the menu</span>
+        </a>
+        <a href="#activites" class="btn btn-ghost">
+          <span class="t-fr">Voir les activités</span>
+          <span class="t-en">See activities</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-scroll-cue" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+      <span class="t-fr">Découvrir</span>
+      <span class="t-en">Discover</span>
+      <div class="scroll-bar"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MENU
+  ============================================================ -->
+  <section class="section menu-section" id="menu">
+    <div class="wrap">
+
+      <div class="sec-head rv">
+        <div class="sec-eyebrow t-fr">Restauration</div>
+        <div class="sec-eyebrow t-en">Dining</div>
+        <h2 class="sec-title t-fr">Notre Menu</h2>
+        <h2 class="sec-title t-en">Our Menu</h2>
+        <p class="sec-lead t-fr">Une cuisine généreuse entre saveurs marocaines et touches méditerranéennes.</p>
+        <p class="sec-lead t-en">A generous cuisine blending Moroccan flavours with Mediterranean touches.</p>
+      </div>
+
+      <div class="menu-grid">
+
+        <!-- Entrées -->
+        <div class="cat-card cat-starters rv">
+          <div class="cat-head">
+            <div class="cat-head-icon">🥗</div>
+            <div class="cat-head-title t-fr">Entrées</div>
+            <div class="cat-head-title t-en">Starters</div>
+          </div>
+          <ul class="cat-items">
+            <li>Salade Maïs Thon Haricot Riz</li>
+            <li>Trio de Salades marocaines mixtes</li>
+            <li>Salade de mozzarella et tomates</li>
+            <li>Soupe harira marocaine</li>
+            <li>Velouté de légumes</li>
+            <li>Salade Niçoise</li>
+          </ul>
+        </div>
+
+        <!-- Plats marocains -->
+        <div class="cat-card cat-moroccan rv rv-d1">
+          <div class="cat-head">
+            <div class="cat-head-icon">🏺</div>
+            <div class="cat-head-title t-fr">Plats marocains</div>
+            <div class="cat-head-title t-en">Moroccan Dishes</div>
+          </div>
+          <ul class="cat-items">
+            <li>Couscous</li>
+            <li>Seffa</li>
+            <li>Tanjia</li>
+            <li>Tajine au poulet et au citron</li>
+            <li>Tajine de bœuf et pruneaux</li>
+            <li>Tajine végétarien</li>
+            <li>Grillades de poulet</li>
+            <li>Grillades Mixtes</li>
+            <li>Pastilla individuelle — Poulet ou Poisson</li>
+          </ul>
+        </div>
+
+        <!-- Plats occidentaux -->
+        <div class="cat-card cat-western rv rv-d2">
+          <div class="cat-head">
+            <div class="cat-head-icon">🍕</div>
+            <div class="cat-head-title t-fr">Plats occidentaux</div>
+            <div class="cat-head-title t-en">Western Dishes</div>
+          </div>
+          <ul class="cat-items">
+            <li>Pizza Margarita</li>
+            <li>Pizza végétarienne</li>
+            <li>Pizza Viande Hachée</li>
+            <li>Pâtes bolognaise</li>
+            <li>Pâtes champignons crémeux</li>
+            <li>Gratin Viande hachée</li>
+            <li>Gratin Poulet</li>
+          </ul>
+        </div>
+
+        <!-- Menu enfant -->
+        <div class="cat-card cat-kids rv rv-d1">
+          <div class="cat-head">
+            <div class="cat-head-icon">⭐</div>
+            <div class="cat-head-title t-fr">Menu Enfant</div>
+            <div class="cat-head-title t-en">Kids' Menu</div>
+          </div>
+          <ul class="cat-items">
+            <li>Cheeseburger avec frites</li>
+            <li>Cordon Bleu avec frites</li>
+            <li>Nuggets avec frites</li>
+          </ul>
+        </div>
+
+        <!-- Desserts -->
+        <div class="cat-card cat-dessert rv rv-d2">
+          <div class="cat-head">
+            <div class="cat-head-icon">🍮</div>
+            <div class="cat-head-title t-fr">Desserts</div>
+            <div class="cat-head-title t-en">Desserts</div>
+          </div>
+          <ul class="cat-items">
+            <li>Mhalabia</li>
+            <li>Rouleaux de printemps au riz et à la cannelle</li>
+            <li>Salade de fruits de saison</li>
+            <li>Biscuits marocains avec thé à la menthe</li>
+            <li>Tarte aux pommes</li>
+            <li>Crème caramel</li>
+            <li>Fruits de saison</li>
+          </ul>
+        </div>
+
+      </div><!-- /menu-grid -->
+
+      <!-- Tarifs -->
+      <div class="tarifs-block rv">
+        <div class="tarifs-head">
+          <h3 class="tarifs-title t-fr">Formules &amp; Tarifs</h3>
+          <h3 class="tarifs-title t-en">Set Menus &amp; Pricing</h3>
+          <p class="tarifs-sub t-fr">Prix par personne · boissons non incluses</p>
+          <p class="tarifs-sub t-en">Price per person · drinks not included</p>
+        </div>
+
+        <div class="tarifs-grid">
+          <div class="tarif-item">
+            <div class="tarif-label t-fr">Adulte<br>Formule Complète</div>
+            <div class="tarif-label t-en">Adult<br>Full Set Menu</div>
+            <div class="tarif-price">
+              15<span class="tarif-unit t-fr">&thinsp;€ / pers.</span>
+                 <span class="tarif-unit t-en">&thinsp;€ / person</span>
+            </div>
+            <div class="tarif-desc t-fr">Entrée + Plat + Dessert</div>
+            <div class="tarif-desc t-en">Starter + Main + Dessert</div>
+          </div>
+          <div class="tarif-item">
+            <div class="tarif-label t-fr">Adulte<br>Formule Partielle</div>
+            <div class="tarif-label t-en">Adult<br>Partial Set Menu</div>
+            <div class="tarif-price">
+              12<span class="tarif-unit t-fr">&thinsp;€ / pers.</span>
+                 <span class="tarif-unit t-en">&thinsp;€ / person</span>
+            </div>
+            <div class="tarif-desc t-fr">Entrée + Plat &nbsp;ou&nbsp; Plat + Dessert</div>
+            <div class="tarif-desc t-en">Starter + Main &nbsp;or&nbsp; Main + Dessert</div>
+          </div>
+          <div class="tarif-item">
+            <div class="tarif-label t-fr">Enfant (–12 ans)<br>Formule Complète</div>
+            <div class="tarif-label t-en">Child (under 12)<br>Full Set Menu</div>
+            <div class="tarif-price">
+              8<span class="tarif-unit t-fr">&thinsp;€ / enf.</span>
+                <span class="tarif-unit t-en">&thinsp;€ / child</span>
+            </div>
+            <div class="tarif-desc t-fr">Entrée + Plat + Dessert</div>
+            <div class="tarif-desc t-en">Starter + Main + Dessert</div>
+          </div>
+          <div class="tarif-item">
+            <div class="tarif-label t-fr">Enfant (–12 ans)<br>Formule Partielle</div>
+            <div class="tarif-label t-en">Child (under 12)<br>Partial Set Menu</div>
+            <div class="tarif-price">
+              6<span class="tarif-unit t-fr">&thinsp;€ / enf.</span>
+                <span class="tarif-unit t-en">&thinsp;€ / child</span>
+            </div>
+            <div class="tarif-desc t-fr">Entrée + Plat &nbsp;ou&nbsp; Plat + Dessert</div>
+            <div class="tarif-desc t-en">Starter + Main &nbsp;or&nbsp; Main + Dessert</div>
+          </div>
+        </div>
+
+        <div class="menu-notice">
+          <p class="t-fr">ℹ&ensp;Merci de déclarer toute allergie alimentaire avant la commande.</p>
+          <p class="t-en">ℹ&ensp;Please declare any food allergies before ordering.</p>
+          <p class="t-fr">ℹ&ensp;Tout le groupe choisit le même plat, entrée et dessert.</p>
+          <p class="t-en">ℹ&ensp;All guests at the table choose the same dish, starter and dessert.</p>
+          <p class="t-fr">ℹ&ensp;Toute demande supplémentaire fera l'objet d'une facturation additionnelle.</p>
+          <p class="t-en">ℹ&ensp;Any additional requests will be charged separately.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ACTIVITIES
+  ============================================================ -->
+  <section class="section" id="activites">
+    <div class="wrap">
+
+      <div class="sec-head rv">
+        <div class="sec-eyebrow t-fr">Expériences</div>
+        <div class="sec-eyebrow t-en">Experiences</div>
+        <h2 class="sec-title t-fr">Nos Activités</h2>
+        <h2 class="sec-title t-en">Our Activities</h2>
+        <p class="sec-lead t-fr">De l'aventure à la détente, vivez Marrakech autrement.</p>
+        <p class="sec-lead t-en">From adventure to relaxation, discover Marrakech differently.</p>
+      </div>
+
+      <div class="act-grid">
+
+        <div class="act-card rv">
+          <div class="act-bar" style="background: var(--clay)"></div>
+          <div class="act-body">
+            <div class="act-icon">🏍️</div>
+            <div class="act-name t-fr">Quad</div>
+            <div class="act-name t-en">Quad Biking</div>
+            <p class="act-desc t-fr">Traversez les pistes ocre de la palmeraie et des dunes aux alentours de Marrakech.</p>
+            <p class="act-desc t-en">Ride through the ochre trails of the palm grove and surrounding dunes near Marrakech.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">À partir de 25 €</div>
+                <div class="act-price t-en">From €25</div>
+                <div class="act-price-detail t-fr">25 € / quad · 30 € si 2 personnes</div>
+                <div class="act-price-detail t-en">€25 / quad · €30 for driver + passenger</div>
+              </div>
+              <div class="act-duration t-fr">1 heure</div>
+              <div class="act-duration t-en">1 hour</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv rv-d1">
+          <div class="act-bar" style="background: var(--bordeaux)"></div>
+          <div class="act-body">
+            <div class="act-icon">🚙</div>
+            <div class="act-name">Buggy</div>
+            <p class="act-desc t-fr">Adrénaline garantie sur les pistes tout-terrain à bord d'un buggy biplace.</p>
+            <p class="act-desc t-en">Guaranteed adrenaline on off-road trails in a two-seater buggy.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">60 € / buggy</div>
+                <div class="act-price t-en">€60 / buggy</div>
+                <div class="act-price-detail t-fr">Pour 2 personnes</div>
+                <div class="act-price-detail t-en">For 2 people</div>
+              </div>
+              <div class="act-duration t-fr">1 heure</div>
+              <div class="act-duration t-en">1 hour</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv rv-d2">
+          <div class="act-bar" style="background: var(--saffron-600)"></div>
+          <div class="act-body">
+            <div class="act-icon">🏜️</div>
+            <div class="act-name t-fr">Agafay — Déjeuner / Dîner</div>
+            <div class="act-name t-en">Agafay — Lunch / Dinner</div>
+            <p class="act-desc t-fr">Repas face au désert de pierres d'Agafay, avec option accès piscine pour une journée inoubliable.</p>
+            <p class="act-desc t-en">Dine facing the Agafay stone desert, with optional pool access for an unforgettable day.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">À partir de 20 €</div>
+                <div class="act-price t-en">From €20 / person</div>
+                <div class="act-price-detail t-fr">20 € sans piscine · 30 € avec accès piscine</div>
+                <div class="act-price-detail t-en">€20 without pool · €30 with pool access</div>
+              </div>
+              <div class="act-duration t-fr">Demi-journée</div>
+              <div class="act-duration t-en">Half day</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv">
+          <div class="act-bar" style="background: var(--olive-700)"></div>
+          <div class="act-body">
+            <div class="act-icon">🚐</div>
+            <div class="act-name t-fr">Transport</div>
+            <div class="act-name t-en">Transport</div>
+            <p class="act-desc t-fr">Navettes aéroport, transferts centre-ville et excursions en van confortable (8 ou 17 places).</p>
+            <p class="act-desc t-en">Airport shuttles, city transfers, and excursions in a comfortable van (8 or 17 seats).</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">À partir de 30 €</div>
+                <div class="act-price t-en">From €30</div>
+                <div class="act-price-detail t-fr">Aéroport · Ville · Agafay · Ourika · Essaouira · Ouzoud</div>
+                <div class="act-price-detail t-en">Airport · City · Agafay · Ourika · Essaouira · Ouzoud</div>
+              </div>
+              <div class="act-duration t-fr">Selon trajet</div>
+              <div class="act-duration t-en">Per journey</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv rv-d1">
+          <div class="act-bar" style="background: var(--pool-700)"></div>
+          <div class="act-body">
+            <div class="act-icon">💆</div>
+            <div class="act-name t-fr">Massage à domicile</div>
+            <div class="act-name t-en">In-house Massage</div>
+            <p class="act-desc t-fr">Profitez d'un massage relaxant directement dans l'intimité de la villa, par un praticien qualifié.</p>
+            <p class="act-desc t-en">Enjoy a relaxing massage in the privacy of the villa, performed by a qualified therapist.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">50 € / pers.</div>
+                <div class="act-price t-en">€50 / person</div>
+                <div class="act-price-detail t-fr">2 personnes simultanément maximum</div>
+                <div class="act-price-detail t-en">Maximum 2 simultaneous guests</div>
+              </div>
+              <div class="act-duration t-fr">Sur demande</div>
+              <div class="act-duration t-en">On request</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv rv-d2">
+          <div class="act-bar" style="background: #c0392b"></div>
+          <div class="act-body">
+            <div class="act-icon">🔥</div>
+            <div class="act-name t-fr">Cracheur de feu</div>
+            <div class="act-name t-en">Fire Breather</div>
+            <p class="act-desc t-fr">Un spectacle de feu époustouflant pour animer vos soirées et émerveiller vos invités.</p>
+            <p class="act-desc t-en">A breathtaking fire show to liven up your evenings and dazzle your guests.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price">160 €</div>
+                <div class="act-price-detail t-fr">Prestation de 30 minutes</div>
+                <div class="act-price-detail t-en">30-minute performance</div>
+              </div>
+              <div class="act-duration">30 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv">
+          <div class="act-bar" style="background: #8e44ad"></div>
+          <div class="act-body">
+            <div class="act-icon">💃</div>
+            <div class="act-name t-fr">Danseuses orientales</div>
+            <div class="act-name t-en">Oriental Dancers</div>
+            <p class="act-desc t-fr">Envoûtez vos soirées avec deux prestations de danse orientale aux costumes somptueux.</p>
+            <p class="act-desc t-en">Enchant your evenings with two oriental dance performances in sumptuous costumes.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price">150 €</div>
+                <div class="act-price-detail t-fr">2 prestations de 15 minutes chacune</div>
+                <div class="act-price-detail t-en">2 performances × 15 minutes each</div>
+              </div>
+              <div class="act-duration">2 × 15 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv rv-d1">
+          <div class="act-bar" style="background: var(--saffron)"></div>
+          <div class="act-body">
+            <div class="act-icon">🥁</div>
+            <div class="act-name">Gnawa</div>
+            <p class="act-desc t-fr">Musique ancestrale marocaine aux rythmes envoûtants — une immersion culturelle unique.</p>
+            <p class="act-desc t-en">Ancient Moroccan music with mesmerising rhythms — a unique cultural immersion.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price">140 €</div>
+                <div class="act-price-detail t-fr">Prestation de 45 minutes</div>
+                <div class="act-price-detail t-en">45-minute performance</div>
+              </div>
+              <div class="act-duration">45 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv rv-d2">
+          <div class="act-bar" style="background: var(--pool)"></div>
+          <div class="act-body">
+            <div class="act-icon">🎷</div>
+            <div class="act-name t-fr">Saxophoniste</div>
+            <div class="act-name t-en">Saxophonist</div>
+            <p class="act-desc t-fr">Ambiance jazzy ou lounge pour vos dîners, soirées et moments privilégiés.</p>
+            <p class="act-desc t-en">Jazz or lounge ambiance for your dinners, evenings, and special moments.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">Sur demande</div>
+                <div class="act-price t-en">On request</div>
+                <div class="act-price-detail t-fr">Tarif selon durée — demandez-nous</div>
+                <div class="act-price-detail t-en">Price according to duration — ask us</div>
+              </div>
+              <div class="act-duration t-fr">À définir</div>
+              <div class="act-duration t-en">To be defined</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="act-card rv">
+          <div class="act-bar" style="background: var(--bordeaux-700)"></div>
+          <div class="act-body">
+            <div class="act-icon">🥂</div>
+            <div class="act-name t-fr">Réception d'invités</div>
+            <div class="act-name t-en">Guest Reception</div>
+            <p class="act-desc t-fr">Organisez un déjeuner ou un dîner de réception dans un cadre exceptionnel au sein de la villa.</p>
+            <p class="act-desc t-en">Host a reception lunch or dinner in an exceptional setting within the villa.</p>
+            <div class="act-footer">
+              <div>
+                <div class="act-price t-fr">Prix sur demande</div>
+                <div class="act-price t-en">Price on request</div>
+                <div class="act-price-detail t-fr">Selon nombre de convives et prestations</div>
+                <div class="act-price-detail t-en">According to guests and services</div>
+              </div>
+              <div class="act-duration t-fr">Selon événement</div>
+              <div class="act-duration t-en">Per event</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /act-grid -->
+
+      <p class="act-note rv t-fr">Pour toute réservation ou renseignement, adressez-vous à la réception.</p>
+      <p class="act-note rv t-en">For any booking or enquiry, please contact the front desk.</p>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WIFI
+  ============================================================ -->
+  <section class="wifi-section" id="wifi">
+    <div class="wifi-glow"></div>
+    <div class="wifi-grain"></div>
+
+    <div class="wrap wifi-inner">
+      <div class="sec-head rv">
+        <div class="sec-eyebrow t-fr">Connexion</div>
+        <div class="sec-eyebrow t-en">Connection</div>
+        <h2 class="sec-title t-fr">Wi-Fi</h2>
+        <h2 class="sec-title t-en">Wi-Fi</h2>
+        <p class="sec-lead t-fr">Connectez-vous au réseau de la maison en un scan.</p>
+        <p class="sec-lead t-en">Connect to the house network with a single scan.</p>
+      </div>
+
+      <div class="wifi-card rv">
+        <div class="qr-wrap">
+          <canvas id="qr-canvas"></canvas>
+        </div>
+        <div class="wifi-ssid">Indoor Wifi</div>
+        <p class="wifi-inst t-fr">Pointez l'appareil photo de votre téléphone sur le QR code pour vous connecter instantanément.</p>
+        <p class="wifi-inst t-en">Point your phone camera at the QR code to connect instantly.</p>
+        <ol class="wifi-steps">
+          <li>
+            <span class="step-n">1</span>
+            <span class="t-fr">Ouvrez l'appareil photo de votre téléphone</span>
+            <span class="t-en">Open your phone's camera app</span>
+          </li>
+          <li>
+            <span class="step-n">2</span>
+            <span class="t-fr">Pointez sur le QR code ci-dessus</span>
+            <span class="t-en">Point it at the QR code above</span>
+          </li>
+          <li>
+            <span class="step-n">3</span>
+            <span class="t-fr">Acceptez la connexion Wi-Fi proposée</span>
+            <span class="t-en">Accept the Wi-Fi connection prompt</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <div class="footer-brand">MARRAKANDA</div>
+        <div class="footer-tag t-fr">Maison d'hôte de luxe · Marrakech</div>
+        <div class="footer-tag t-en">Luxury Guest House · Marrakech</div>
+      </div>
+      <div class="footer-copy t-fr">© 2025 Marrakanda · Tous droits réservés</div>
+      <div class="footer-copy t-en">© 2025 Marrakanda · All rights reserved</div>
+    </div>
+  </footer>
+
+  <!-- QR code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+  <script>
+    /* --- Language toggle --- */
+    const body = document.body;
+    document.getElementById('lang-btn').addEventListener('click', function() {
+      var isFr = body.classList.contains('lang-fr');
+      body.classList.remove('lang-fr', 'lang-en');
+      body.classList.add(isFr ? 'lang-en' : 'lang-fr');
+      document.documentElement.lang = isFr ? 'en' : 'fr';
+    });
+
+    /* --- Nav scroll state --- */
+    var nav = document.getElementById('nav');
+    function updateNav() {
+      if (window.scrollY > 50) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+
+    /* --- Scroll reveal --- */
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.11 });
+    document.querySelectorAll('.rv').forEach(function(el) {
+      observer.observe(el);
+    });
+
+    /* --- QR Code --- */
+    QRCode.toCanvas(
+      document.getElementById('qr-canvas'),
+      'WIFI:T:WPA;S:Indoor Wifi;P:Marrakech2025;;',
+      {
+        width: 172,
+        margin: 2,
+        color: { dark: '#211810', light: '#ffffff' }
+      },
+      function(err) { if (err) console.warn('QR:', err); }
+    );
+  </script>
+
+</body>
+</html>
