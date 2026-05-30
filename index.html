@@ -103,12 +103,25 @@
       box-shadow: 0 1px 0 rgba(33, 24, 16, .07);
     }
     .nav-brand {
+      display: flex; align-items: center; gap: 11px;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .brand-icon { color: var(--saffron-200); transition: color .45s; flex-shrink: 0; }
+    .nav.scrolled .brand-icon { color: var(--saffron-600); }
+    .brand-name {
       font-family: var(--f-display);
       font-size: 1.05rem; letter-spacing: .28em;
-      text-decoration: none; color: white;
+      color: white; line-height: 1;
       transition: color .45s;
     }
-    .nav.scrolled .nav-brand { color: var(--ink-900); }
+    .brand-sub {
+      font-family: var(--f-sans); font-size: .47rem;
+      letter-spacing: .34em; text-transform: uppercase;
+      color: rgba(255,255,255,.48); margin-top: 3px;
+      transition: color .45s;
+    }
+    .nav.scrolled .brand-name { color: var(--ink-900); }
+    .nav.scrolled .brand-sub  { color: var(--sand-500); }
 
     .nav-links {
       display: flex; align-items: center; gap: 40px; list-style: none;
@@ -180,12 +193,13 @@
       width: 100%; max-width: var(--maxw);
       margin: 0 auto;
       padding: 128px 48px 104px;
+      text-align: center;
     }
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 14px;
       font-family: var(--f-sans); font-size: .64rem;
       letter-spacing: .38em; text-transform: uppercase; font-weight: 500;
-      color: var(--saffron-200); margin-bottom: 22px;
+      color: var(--saffron-200); margin-top: 14px; margin-bottom: 0;
       opacity: 0; animation: up .8s .35s both;
     }
     .hero-eyebrow::before {
@@ -204,11 +218,11 @@
       font-family: var(--f-serif);
       font-size: clamp(1.1rem, 1.8vw, 1.35rem);
       font-style: italic; color: var(--sand-200);
-      max-width: 50ch; margin-top: 20px; line-height: 1.65;
+      max-width: 50ch; margin: 20px auto 0; line-height: 1.65;
       opacity: 0; animation: up .8s .68s both;
     }
     .hero-ctas {
-      display: flex; gap: 12px; flex-wrap: wrap;
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
       margin-top: 40px;
       opacity: 0; animation: up .8s .84s both;
     }
@@ -226,6 +240,10 @@
     .btn-fill:hover { background: var(--clay-600); }
     .btn-ghost  { background: transparent; color: white; border-color: rgba(255,255,255,.42); }
     .btn-ghost:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.68); }
+    .btn-bordeaux { background: var(--bordeaux); color: white; border-color: var(--bordeaux); }
+    .btn-bordeaux:hover { background: var(--bordeaux-700); border-color: var(--bordeaux-700); }
+    .btn-olive    { background: var(--olive); color: white; border-color: var(--olive); }
+    .btn-olive:hover { background: var(--olive-700); border-color: var(--olive-700); }
 
     .hero-scroll-cue {
       position: absolute; bottom: 40px; left: 50%;
@@ -453,8 +471,9 @@
       box-shadow: 0 8px 28px rgba(33,24,16,.12);
     }
     .act-bar { height: 5px; flex-shrink: 0; }
+    .act-img { width: 100%; height: 190px; object-fit: cover; display: block; }
     .act-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-    .act-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .act-icon { display: none; }
     .act-name {
       font-family: var(--f-display);
       font-size: 1.18rem; color: var(--ink-900);
@@ -590,26 +609,479 @@
     /* ============================================================
        RESPONSIVE
     ============================================================ */
-    @media (max-width: 1024px) {
-      .tarifs-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 880px) {
-      .menu-grid { grid-template-columns: repeat(2, 1fr); }
-      .cat-card, .cat-card:nth-child(4), .cat-card:nth-child(5) { grid-column: span 1; }
-      .act-grid  { grid-template-columns: repeat(2, 1fr); }
-      .act-card:last-child:nth-child(3n - 2) { grid-column: auto; }
-    }
     @media (max-width: 600px) {
       .wrap       { padding: 0 22px; }
       .nav        { padding: 0 22px; }
       .nav-links  { display: none; }
       .hero-content { padding-left: 22px; padding-right: 22px; }
       .section    { padding: 72px 0; }
-      .menu-grid  { grid-template-columns: 1fr; }
       .act-grid   { grid-template-columns: 1fr; }
-      .tarifs-block { padding: 32px 24px; }
-      .tarifs-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .wifi-card  { padding: 36px 28px; }
+    }
+
+    /* ============================================================
+       BOOK FLIP MENU
+    ============================================================ */
+    .book-scene {
+      position: relative;
+      max-width: 1100px;
+      margin: 48px auto 0;
+      perspective: 2800px;
+      perspective-origin: center 40%;
+    }
+    .bk-spreads {
+      position: relative;
+      width: 100%;
+      height: 820px;
+      box-shadow: 0 4px 12px rgba(33,24,16,.12), 0 16px 48px rgba(33,24,16,.22), 0 32px 72px rgba(33,24,16,.18);
+    }
+    .bk-spreads::after {
+      content: '';
+      position: absolute;
+      left: calc(50% - 7px);
+      top: 0; bottom: 0;
+      width: 14px;
+      background: linear-gradient(to right,
+        rgba(0,0,0,.22) 0%, rgba(0,0,0,.06) 35%,
+        rgba(255,255,255,.1) 50%,
+        rgba(0,0,0,.06) 65%, rgba(0,0,0,.22) 100%);
+      z-index: 6;
+      pointer-events: none;
+    }
+    .bk-spread {
+      position: absolute;
+      inset: 0;
+      display: none;
+      width: 100%; height: 100%;
+    }
+    .bk-spread.bk-spread-active { display: flex; }
+
+    .bk-page {
+      width: 50%; height: 100%;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Endpaper */
+    .bk-endpaper {
+      background-color: var(--clay-800);
+      background-image:
+        repeating-linear-gradient(45deg, transparent, transparent 17px, rgba(255,255,255,.04) 17px, rgba(255,255,255,.04) 18px),
+        repeating-linear-gradient(-45deg, transparent, transparent 17px, rgba(255,255,255,.04) 17px, rgba(255,255,255,.04) 18px);
+    }
+    .bk-endpaper-inner {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+    }
+    .bk-endpaper-ring {
+      width: 72px; height: 72px;
+      border: 1px solid rgba(190,107,67,.35);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .bk-endpaper-ring::after {
+      content: '✦';
+      color: rgba(190,107,67,.4);
+      font-size: .9rem;
+    }
+    .bk-endpaper-text {
+      font-family: var(--f-sans);
+      font-size: .48rem; letter-spacing: .4em;
+      text-transform: uppercase;
+      color: rgba(190,107,67,.35);
+    }
+
+    /* Cover */
+    .bk-cover {
+      background: linear-gradient(155deg, var(--bordeaux-900) 0%, var(--bordeaux) 55%, var(--bordeaux-700) 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 36px 32px; color: white; position: relative;
+    }
+    .bk-cover-sup {
+      font-family: var(--f-sans); font-size: .5rem;
+      letter-spacing: .42em; text-transform: uppercase;
+      color: var(--saffron-200); margin-bottom: 18px;
+    }
+    .bk-cover-title {
+      font-family: var(--f-display);
+      font-size: clamp(2rem, 3.8vw, 3rem);
+      letter-spacing: .07em; line-height: 1; color: white;
+    }
+    .bk-cover-rule {
+      width: 52px; height: 1px;
+      background: var(--saffron-200); opacity: .55;
+      margin: 20px auto;
+    }
+    .bk-cover-sub {
+      font-family: var(--f-sans); font-size: .52rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--sand-300); margin-bottom: 12px;
+    }
+    .bk-cover-tag {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .9rem; color: var(--bordeaux-200); line-height: 1.55;
+    }
+    .bk-cover-pg {
+      position: absolute; bottom: 18px;
+      font-family: var(--f-sans); font-size: .48rem;
+      letter-spacing: .25em; color: rgba(255,255,255,.2);
+    }
+
+    /* Chapter pages */
+    .bk-chapter {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 32px 24px;
+    }
+    .bk-ch-clay    { background: linear-gradient(155deg, var(--clay-800) 0%, var(--clay-600) 100%); color: white; }
+    .bk-ch-bordeaux{ background: linear-gradient(155deg, var(--bordeaux-900) 0%, var(--bordeaux-700) 100%); color: white; }
+    .bk-ch-saffron { background: linear-gradient(155deg, var(--saffron-600) 0%, var(--saffron) 100%); color: white; }
+    .bk-ch-olive   { background: linear-gradient(155deg, var(--olive-700) 0%, var(--olive) 100%); color: white; }
+    .bk-ch-ink     { background: linear-gradient(155deg, var(--ink-900) 0%, var(--ink-800) 100%); color: white; }
+    .bk-ch-roman {
+      font-family: var(--f-display); font-size: 3.8rem;
+      line-height: 1; opacity: .28; margin-bottom: 14px;
+    }
+    .bk-ch-name {
+      font-family: var(--f-sans); font-size: .54rem;
+      letter-spacing: .38em; text-transform: uppercase; opacity: .8;
+    }
+    .bk-ch-name-en {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .85rem; opacity: .55; margin-top: 4px;
+    }
+    .bk-ch-rule {
+      width: 36px; height: 1px;
+      background: currentColor; opacity: .35; margin: 14px auto;
+    }
+    .bk-ch-icon { font-size: 1.8rem; opacity: .45; margin-top: 14px; }
+
+    /* Paper (content) pages */
+    .bk-paper {
+      background: var(--sand-50);
+      padding: 32px 30px 24px;
+      overflow: hidden; position: relative;
+    }
+    .bk-pg-header {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--sand-300);
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .bk-pg-eyebrow {
+      font-family: var(--f-sans); font-size: .7rem;
+      letter-spacing: .28em; text-transform: uppercase; color: var(--clay);
+    }
+    .bk-pg-title {
+      font-family: var(--f-display); font-size: 1.15rem;
+      letter-spacing: .04em; color: var(--ink-900);
+    }
+    .bk-pg-title-en {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .78rem; color: var(--sand-400);
+    }
+    .bk-dishes { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+    .bk-dish-name {
+      font-family: var(--f-serif); font-weight: 500;
+      font-size: 1.15rem; color: var(--ink-900); line-height: 1.25;
+    }
+    .bk-dish-sep {
+      font-size: .7rem; color: var(--clay-300);
+      vertical-align: middle; margin: 0 5px;
+    }
+    .bk-dish-name-en {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .95rem; color: var(--ink-800);
+    }
+    .bk-dish-desc {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .88rem; color: var(--bordeaux); line-height: 1.45; margin-top: 3px;
+    }
+    [data-i="2"] .bk-dish-desc { color: var(--olive); }
+    [data-i="4"] .bk-dish-desc { color: var(--saffron-600); }
+    [data-i="5"] .bk-dish-desc { color: var(--ink-700); }
+    .bk-pg-num {
+      position: absolute; bottom: 8px;
+      font-family: var(--f-sans); font-size: .48rem;
+      letter-spacing: .2em; color: var(--sand-400);
+    }
+    .bk-pg-num-l { left: 18px; }
+    .bk-pg-num-r { right: 18px; }
+
+    /* Tarifs inside book */
+    .bk-tarifs { display: flex; flex-direction: column; gap: 7px; }
+    .bk-tarif-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 5px 0;
+      border-bottom: 1px solid var(--sand-200); gap: 8px;
+    }
+    .bk-tarif-lbl {
+      font-family: var(--f-serif); font-size: .76rem;
+      color: var(--ink-900); line-height: 1.3;
+    }
+    .bk-tarif-lbl small {
+      display: block; font-size: .62rem;
+      color: var(--sand-500); font-style: italic;
+    }
+    .bk-tarif-price {
+      font-family: var(--f-display); font-size: 1.05rem;
+      color: var(--clay); white-space: nowrap; flex-shrink: 0;
+    }
+    .bk-tarif-price span {
+      font-family: var(--f-sans); font-size: .56rem; color: var(--sand-500);
+    }
+    .bk-notice {
+      margin-top: 10px; padding-top: 8px;
+      border-top: 1px solid var(--sand-200);
+    }
+    .bk-notice p {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .6rem; color: var(--sand-500);
+      line-height: 1.4; margin-bottom: 3px;
+    }
+
+    /* Closing page */
+    .bk-closing {
+      background: linear-gradient(155deg, var(--ink-900) 0%, var(--ink-800) 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 36px 28px; color: white;
+    }
+    .bk-closing-title {
+      font-family: var(--f-display); font-size: 1.6rem;
+      letter-spacing: .08em; color: white; margin-bottom: 14px;
+    }
+    .bk-closing-rule { width: 40px; height: 1px; background: var(--saffron-200); opacity: .45; margin: 0 auto 14px; }
+    .bk-closing-quote {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .85rem; color: var(--sand-400); line-height: 1.6; max-width: 26ch;
+    }
+    .bk-closing-addr {
+      margin-top: 20px; font-family: var(--f-sans);
+      font-size: .5rem; letter-spacing: .28em;
+      text-transform: uppercase; color: var(--sand-600);
+    }
+
+    /* Flipper */
+    .bk-flipper {
+      position: absolute; top: 0;
+      width: 50%; height: 100%;
+      transform-style: preserve-3d;
+      z-index: 20; pointer-events: none;
+      display: none;
+    }
+    .bk-flipper.bk-on { display: block; }
+    .bk-flipper-face {
+      position: absolute; inset: 0;
+      backface-visibility: hidden; overflow: hidden;
+    }
+    .bk-flipper-back { transform: rotateY(180deg); }
+
+    /* Nav buttons */
+    .bk-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 1px solid var(--sand-300);
+      background: rgba(251,246,236,.93);
+      color: var(--ink-800); font-size: 1.25rem; line-height: 1;
+      cursor: pointer; z-index: 25;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .2s, opacity .2s;
+      backdrop-filter: blur(4px); padding-bottom: 1px;
+    }
+    .bk-btn:hover:not(:disabled) { background: white; transform: translateY(-50%) scale(1.1); }
+    .bk-btn:disabled { opacity: .28; cursor: default; }
+    .bk-btn-prev { left: -21px; }
+    .bk-btn-next { right: -21px; }
+
+    /* Dots */
+    .bk-dots {
+      display: flex; justify-content: center; gap: 8px; margin-top: 22px;
+    }
+    .bk-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--sand-400); cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .bk-dot.bk-on { background: var(--clay); transform: scale(1.35); }
+
+    /* Download button */
+    .menu-dl {
+      display: flex; justify-content: center;
+      margin-top: 28px;
+    }
+    .menu-dl-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 12px 28px;
+      border: 1px solid var(--clay-300);
+      border-radius: 4px;
+      font-family: var(--f-sans); font-size: .62rem;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--clay-600);
+      background: transparent;
+      cursor: pointer;
+      position: relative; z-index: 10;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .menu-dl-btn:hover {
+      background: var(--clay); color: white; border-color: var(--clay);
+    }
+    .menu-dl-btn svg { flex-shrink: 0; }
+
+    /* ---- PRINT ---- */
+    @media print {
+      body * { visibility: hidden; }
+      .print-menu, .print-menu * { visibility: visible; }
+      .print-menu {
+        position: fixed; inset: 0;
+        display: block !important;
+        background: white;
+        padding: 20px;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        color: #211810;
+      }
+      .print-menu h1 {
+        font-family: 'Marcellus', serif;
+        font-size: 2.2rem; text-align: center;
+        letter-spacing: .1em; margin-bottom: 4px;
+      }
+      .print-menu .pm-sub {
+        text-align: center; font-size: .7rem; letter-spacing: .3em;
+        text-transform: uppercase; color: #9A5232; margin-bottom: 24px;
+      }
+      .print-menu .pm-section { margin-bottom: 22px; page-break-inside: avoid; }
+      .print-menu .pm-cat {
+        font-family: 'Marcellus', serif; font-size: 1rem;
+        letter-spacing: .06em; color: #6E2230;
+        border-bottom: 1px solid #DCC9A8; padding-bottom: 4px; margin-bottom: 10px;
+      }
+      .print-menu .pm-dish { margin-bottom: 7px; }
+      .print-menu .pm-dish-name { font-size: .9rem; font-weight: 600; }
+      .print-menu .pm-dish-desc { font-size: .75rem; font-style: italic; color: #6E2230; }
+      .print-menu .pm-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+      .print-menu .pm-tarifs { margin-top: 12px; }
+      .print-menu .pm-tarif-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #EADCC4; font-size: .78rem; }
+      .print-menu .pm-notice { font-size: .65rem; font-style: italic; color: #7E6849; margin-top: 10px; }
+      @page { margin: 15mm; size: A4; }
+    }
+
+    /* Menu section title — smaller than global */
+    .menu-section .sec-title { font-size: clamp(1.5rem, 3vw, 2.2rem); }
+
+    @media (max-width: 768px) {
+      .bk-spreads { height: 560px; }
+      .bk-paper { padding: 22px 18px 16px; }
+      .bk-dish-name { font-size: .9rem; }
+      .bk-dish-desc { font-size: .7rem; }
+      .bk-dishes { gap: 10px; }
+      .bk-cover-title { font-size: 1.7rem; }
+      .bk-ch-roman { font-size: 2.8rem; }
+    }
+    @media (max-width: 560px) {
+      .bk-spreads { height: auto; aspect-ratio: 1/1.1; }
+      .bk-spread { flex-direction: column; }
+      .bk-page { width: 100%; height: 50%; }
+      .bk-spreads::after { left: 0; right: 0; top: 50%; height: 14px; width: 100%; }
+      .bk-btn-prev { left: -14px; }
+      .bk-btn-next { right: -14px; }
+      .bk-flipper { width: 100%; height: 50%; left: 0 !important; top: 0; }
+    }
+
+    /* ── MENU LAYOUT (book + reservation panel) ── */
+    .menu-section .wrap { max-width: 1560px; }
+    .menu-layout { display: flex; gap: 36px; align-items: flex-start; }
+    .menu-book-side { flex: 1; min-width: 0; }
+
+    /* ── RESERVATION PANEL ── */
+    .res-panel {
+      width: 380px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 14px;
+      margin-top: 48px;
+      position: sticky; top: 80px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--sand-300) transparent;
+    }
+    .res-mod {
+      background: #fff; border-radius: 14px;
+      padding: 18px;
+      border: 1.5px solid var(--sand-200);
+      box-shadow: 0 2px 10px rgba(33,24,16,.06);
+      position: relative;
+    }
+    .res-mod-title {
+      font-family: var(--f-serif); font-size: 1.05rem; font-weight: 700;
+      color: var(--ink-900); margin-bottom: 14px; text-align: center;
+    }
+    .res-field { margin-bottom: 11px; }
+    .res-field:last-child { margin-bottom: 0; }
+    .res-lbl {
+      display: block; font-size: .73rem; font-weight: 600;
+      color: var(--ink-700); text-transform: uppercase;
+      letter-spacing: .06em; margin-bottom: 5px; font-family: var(--f-sans);
+    }
+    .res-sel {
+      width: 100%; padding: 9px 32px 9px 12px;
+      border: 1.5px solid var(--sand-300); border-radius: 8px;
+      font-family: var(--f-sans); font-size: .88rem; color: var(--ink-900);
+      background: var(--sand-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%234A3B2C' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 11px center;
+      -webkit-appearance: none; appearance: none;
+      cursor: pointer; transition: border-color .2s; box-sizing: border-box;
+    }
+    .res-sel:focus { outline: none; border-color: var(--bordeaux); }
+    .res-counter-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .res-counter-row.mt { margin-top: 12px; }
+    .res-counter-wrap { display: flex; align-items: center; gap: 10px; }
+    .res-adj {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1.5px solid var(--sand-300); background: var(--sand-50);
+      font-size: 1.1rem; font-weight: 700; color: var(--ink-800);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      line-height: 1; transition: all .18s; font-family: var(--f-sans); padding: 0;
+    }
+    .res-adj:hover { border-color: var(--bordeaux); color: var(--bordeaux); background: #f5e8ea; }
+    .res-cnt { font-size: 1.3rem; font-weight: 700; color: var(--ink-900); min-width: 22px; text-align: center; font-family: var(--f-sans); }
+    .res-radios {
+      display: none; flex-direction: column; gap: 6px;
+      margin-top: 8px; padding: 10px 12px;
+      background: var(--sand-50); border-radius: 8px; border: 1px solid var(--sand-200);
+    }
+    .res-radios.visible { display: flex; }
+    .res-radios label { display: flex; align-items: center; gap: 8px; font-size: .83rem; color: var(--ink-800); cursor: pointer; font-family: var(--f-sans); }
+    .res-radios input[type="radio"] { accent-color: var(--bordeaux); flex-shrink: 0; }
+    .res-date-input {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid var(--sand-300); border-radius: 8px;
+      font-family: var(--f-sans); font-size: .9rem; color: var(--ink-900);
+      background: var(--sand-50); cursor: pointer; box-sizing: border-box;
+    }
+    .res-date-input:focus { outline: none; border-color: var(--bordeaux); }
+    .res-total-mod { background: var(--olive) !important; border-color: var(--olive) !important; }
+    .res-total-mod .res-mod-title { color: #fff; }
+    .res-bd-row { display: flex; justify-content: space-between; font-size: .83rem; color: rgba(255,255,255,.75); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.15); font-family: var(--f-sans); }
+    .res-empty-msg { font-size: .82rem; color: rgba(255,255,255,.6); font-style: italic; font-family: var(--f-sans); }
+    .res-grand-total { margin-top: 14px; font-size: 2.1rem; font-weight: 700; color: #fff; font-family: var(--f-serif); text-align: right; }
+    /* Calendrier */
+    .res-date-wrap { position: relative; }
+    .res-date-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--olive); }
+    .res-date-input { padding-left: 38px !important; }
+    .res-wa-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 15px 20px;
+      background: var(--bordeaux); color: #fff; border: none; border-radius: 12px;
+      font-family: var(--f-sans); font-size: .97rem; font-weight: 700;
+      cursor: pointer; transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(110,34,48,.3);
+    }
+    .res-wa-btn:hover { background: var(--bordeaux-700); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(110,34,48,.4); }
+    .res-wa-btn:active { transform: none; }
+    .res-note { font-size: .74rem; color: var(--sand-500); text-align: center; margin: 4px 0 0; font-family: var(--f-sans); }
+    @media (max-width: 1100px) {
+      .menu-layout { flex-direction: column; }
+      .menu-book-side { width: 100%; }
+      .res-panel { width: 100%; position: static; max-height: none; margin-top: 24px; }
     }
   </style>
 </head>
@@ -620,7 +1092,19 @@
        NAV
   ============================================================ -->
   <nav class="nav" id="nav">
-    <a href="#top" class="nav-brand">MARRAKANDA</a>
+    <a href="#top" class="nav-brand">
+      <svg class="brand-icon" viewBox="0 0 40 40" width="22" height="22" aria-hidden="true">
+        <g fill="currentColor">
+          <rect x="8" y="8" width="24" height="24"/>
+          <rect x="8" y="8" width="24" height="24" transform="rotate(45 20 20)"/>
+        </g>
+      </svg>
+      <div>
+        <div class="brand-name">MARRAKANDA</div>
+        <div class="brand-sub t-fr">Maison d'hôte · Marrakech</div>
+        <div class="brand-sub t-en">Guest House · Marrakech</div>
+      </div>
+    </a>
     <ul class="nav-links">
       <li>
         <a href="#menu">
@@ -654,15 +1138,15 @@
     <div class="hero-grain"></div>
 
     <div class="hero-content">
+      <h1 class="hero-title">Marrakanda</h1>
+
       <div class="hero-eyebrow">
         <span class="t-fr">Marrakech · Maison d'hôte</span>
         <span class="t-en">Marrakech · Guest House</span>
       </div>
 
-      <h1 class="hero-title">Marrakanda</h1>
-
       <p class="hero-sub t-fr">
-        Un jardin de luxe au cœur de la palmeraie —<br>où chaque détail est une invitation à la sérénité.
+        Le Luxe, c'est l'ombre, l'espace et le temps.
       </p>
       <p class="hero-sub t-en">
         A luxury garden retreat in the heart of the palm grove —<br>where every detail invites serenity.
@@ -673,22 +1157,24 @@
           <span class="t-fr">Découvrir le menu</span>
           <span class="t-en">Explore the menu</span>
         </a>
-        <a href="#activites" class="btn btn-ghost">
+        <a href="#activites" class="btn btn-bordeaux">
           <span class="t-fr">Voir les activités</span>
           <span class="t-en">See activities</span>
+        </a>
+        <a href="#wifi" class="btn btn-olive">
+          <span class="t-fr">Scanner QR Wifi</span>
+          <span class="t-en">Scan Wifi QR</span>
         </a>
       </div>
     </div>
 
     <div class="hero-scroll-cue" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
-      <span class="t-fr">Découvrir</span>
-      <span class="t-en">Discover</span>
       <div class="scroll-bar"></div>
     </div>
   </section>
 
   <!-- ============================================================
-       MENU
+       MENU — BOOK FLIP
   ============================================================ -->
   <section class="section menu-section" id="menu">
     <div class="wrap">
@@ -698,162 +1184,568 @@
         <div class="sec-eyebrow t-en">Dining</div>
         <h2 class="sec-title t-fr">Notre Menu</h2>
         <h2 class="sec-title t-en">Our Menu</h2>
-        <p class="sec-lead t-fr">Une cuisine généreuse entre saveurs marocaines et touches méditerranéennes.</p>
-        <p class="sec-lead t-en">A generous cuisine blending Moroccan flavours with Mediterranean touches.</p>
+        <p class="sec-lead t-fr">Feuilletez notre menu — une cuisine généreuse entre saveurs marocaines et touches méditerranéennes.</p>
+        <p class="sec-lead t-en">Browse our menu — generous cuisine blending Moroccan flavours with Mediterranean touches.</p>
       </div>
 
-      <div class="menu-grid">
+      <div class="menu-layout">
+        <div class="menu-book-side">
 
-        <!-- Entrées -->
-        <div class="cat-card cat-starters rv">
-          <div class="cat-head">
-            <div class="cat-head-icon">🥗</div>
-            <div class="cat-head-title t-fr">Entrées</div>
-            <div class="cat-head-title t-en">Starters</div>
-          </div>
-          <ul class="cat-items">
-            <li>Salade Maïs Thon Haricot Riz</li>
-            <li>Trio de Salades marocaines mixtes</li>
-            <li>Salade de mozzarella et tomates</li>
-            <li>Soupe harira marocaine</li>
-            <li>Velouté de légumes</li>
-            <li>Salade Niçoise</li>
-          </ul>
-        </div>
+      <!-- BOOK -->
+      <div class="book-scene rv">
+        <div class="bk-spreads" id="bkSpreads">
 
-        <!-- Plats marocains -->
-        <div class="cat-card cat-moroccan rv rv-d1">
-          <div class="cat-head">
-            <div class="cat-head-icon">🏺</div>
-            <div class="cat-head-title t-fr">Plats marocains</div>
-            <div class="cat-head-title t-en">Moroccan Dishes</div>
-          </div>
-          <ul class="cat-items">
-            <li>Couscous</li>
-            <li>Seffa</li>
-            <li>Tanjia</li>
-            <li>Tajine au poulet et au citron</li>
-            <li>Tajine de bœuf et pruneaux</li>
-            <li>Tajine végétarien</li>
-            <li>Grillades de poulet</li>
-            <li>Grillades Mixtes</li>
-            <li>Pastilla individuelle — Poulet ou Poisson</li>
-          </ul>
-        </div>
-
-        <!-- Plats occidentaux -->
-        <div class="cat-card cat-western rv rv-d2">
-          <div class="cat-head">
-            <div class="cat-head-icon">🍕</div>
-            <div class="cat-head-title t-fr">Plats occidentaux</div>
-            <div class="cat-head-title t-en">Western Dishes</div>
-          </div>
-          <ul class="cat-items">
-            <li>Pizza Margarita</li>
-            <li>Pizza végétarienne</li>
-            <li>Pizza Viande Hachée</li>
-            <li>Pâtes bolognaise</li>
-            <li>Pâtes champignons crémeux</li>
-            <li>Gratin Viande hachée</li>
-            <li>Gratin Poulet</li>
-          </ul>
-        </div>
-
-        <!-- Menu enfant -->
-        <div class="cat-card cat-kids rv rv-d1">
-          <div class="cat-head">
-            <div class="cat-head-icon">⭐</div>
-            <div class="cat-head-title t-fr">Menu Enfant</div>
-            <div class="cat-head-title t-en">Kids' Menu</div>
-          </div>
-          <ul class="cat-items">
-            <li>Cheeseburger avec frites</li>
-            <li>Cordon Bleu avec frites</li>
-            <li>Nuggets avec frites</li>
-          </ul>
-        </div>
-
-        <!-- Desserts -->
-        <div class="cat-card cat-dessert rv rv-d2">
-          <div class="cat-head">
-            <div class="cat-head-icon">🍮</div>
-            <div class="cat-head-title t-fr">Desserts</div>
-            <div class="cat-head-title t-en">Desserts</div>
-          </div>
-          <ul class="cat-items">
-            <li>Mhalabia</li>
-            <li>Rouleaux de printemps au riz et à la cannelle</li>
-            <li>Salade de fruits de saison</li>
-            <li>Biscuits marocains avec thé à la menthe</li>
-            <li>Tarte aux pommes</li>
-            <li>Crème caramel</li>
-            <li>Fruits de saison</li>
-          </ul>
-        </div>
-
-      </div><!-- /menu-grid -->
-
-      <!-- Tarifs -->
-      <div class="tarifs-block rv">
-        <div class="tarifs-head">
-          <h3 class="tarifs-title t-fr">Formules &amp; Tarifs</h3>
-          <h3 class="tarifs-title t-en">Set Menus &amp; Pricing</h3>
-          <p class="tarifs-sub t-fr">Prix par personne · boissons non incluses</p>
-          <p class="tarifs-sub t-en">Price per person · drinks not included</p>
-        </div>
-
-        <div class="tarifs-grid">
-          <div class="tarif-item">
-            <div class="tarif-label t-fr">Adulte<br>Formule Complète</div>
-            <div class="tarif-label t-en">Adult<br>Full Set Menu</div>
-            <div class="tarif-price">
-              15<span class="tarif-unit t-fr">&thinsp;€ / pers.</span>
-                 <span class="tarif-unit t-en">&thinsp;€ / person</span>
+          <!-- ── SPREAD 0 : COUVERTURE ── -->
+          <div class="bk-spread bk-spread-active" data-i="0">
+            <div class="bk-page bk-page-left bk-endpaper">
+              <div class="bk-endpaper-inner">
+                <div class="bk-endpaper-ring"></div>
+                <div class="bk-endpaper-text">Marrakanda</div>
+              </div>
             </div>
-            <div class="tarif-desc t-fr">Entrée + Plat + Dessert</div>
-            <div class="tarif-desc t-en">Starter + Main + Dessert</div>
-          </div>
-          <div class="tarif-item">
-            <div class="tarif-label t-fr">Adulte<br>Formule Partielle</div>
-            <div class="tarif-label t-en">Adult<br>Partial Set Menu</div>
-            <div class="tarif-price">
-              12<span class="tarif-unit t-fr">&thinsp;€ / pers.</span>
-                 <span class="tarif-unit t-en">&thinsp;€ / person</span>
+            <div class="bk-page bk-page-right bk-cover">
+              <div class="bk-cover-sup">Marrakech · Maison d'hôte</div>
+              <div class="bk-cover-title">Marrakanda</div>
+              <div class="bk-cover-rule"></div>
+              <div class="bk-cover-sub t-fr">Notre Menu</div>
+              <div class="bk-cover-sub t-en">Our Menu</div>
+              <div class="bk-cover-tag t-fr">Cuisine marocaine &amp; méditerranéenne</div>
+              <div class="bk-cover-tag t-en">Moroccan &amp; Mediterranean cuisine</div>
+              <div class="bk-cover-pg">Marrakanda · 2025</div>
             </div>
-            <div class="tarif-desc t-fr">Entrée + Plat &nbsp;ou&nbsp; Plat + Dessert</div>
-            <div class="tarif-desc t-en">Starter + Main &nbsp;or&nbsp; Main + Dessert</div>
           </div>
-          <div class="tarif-item">
-            <div class="tarif-label t-fr">Enfant (–12 ans)<br>Formule Complète</div>
-            <div class="tarif-label t-en">Child (under 12)<br>Full Set Menu</div>
-            <div class="tarif-price">
-              8<span class="tarif-unit t-fr">&thinsp;€ / enf.</span>
-                <span class="tarif-unit t-en">&thinsp;€ / child</span>
+
+          <!-- ── SPREAD 1 : TARIFS (juste après couverture) ── -->
+          <div class="bk-spread" data-i="1">
+            <div class="bk-page bk-page-left bk-chapter bk-ch-ink">
+              <div class="bk-ch-roman" style="font-size:2.8rem;">✦</div>
+              <div class="bk-ch-name t-fr">Formules &amp; Tarifs</div>
+              <div class="bk-ch-name t-en">Set Menus &amp; Pricing</div>
+              <div class="bk-ch-rule"></div>
+              <div class="bk-ch-name-en t-fr">Prix par personne · boissons non incluses</div>
+              <div class="bk-ch-name-en t-en">Per person · drinks not included</div>
             </div>
-            <div class="tarif-desc t-fr">Entrée + Plat + Dessert</div>
-            <div class="tarif-desc t-en">Starter + Main + Dessert</div>
-          </div>
-          <div class="tarif-item">
-            <div class="tarif-label t-fr">Enfant (–12 ans)<br>Formule Partielle</div>
-            <div class="tarif-label t-en">Child (under 12)<br>Partial Set Menu</div>
-            <div class="tarif-price">
-              6<span class="tarif-unit t-fr">&thinsp;€ / enf.</span>
-                <span class="tarif-unit t-en">&thinsp;€ / child</span>
+            <div class="bk-page bk-page-right bk-paper">
+              <div class="bk-pg-header">
+                <span class="bk-pg-eyebrow t-fr">Formules &amp; Tarifs</span>
+                <span class="bk-pg-eyebrow t-en">Set Menus &amp; Pricing</span>
+              </div>
+              <div class="bk-tarifs" style="gap:18px;">
+                <div class="bk-tarif-row" style="padding:14px 0;">
+                  <div class="bk-tarif-lbl" style="font-size:1rem;">
+                    <span class="t-fr">Adulte — Formule Complète</span>
+                    <span class="t-en">Adult — Full Set Menu</span>
+                    <small class="t-fr" style="font-size:.8rem;">Entrée + Plat + Dessert</small>
+                    <small class="t-en" style="font-size:.8rem;">Starter + Main + Dessert</small>
+                  </div>
+                  <div class="bk-tarif-price" style="font-size:1.9rem;">15<span class="t-fr" style="font-size:.75rem;">&thinsp;€/pers.</span><span class="t-en" style="font-size:.75rem;">&thinsp;€/p.</span></div>
+                </div>
+                <div class="bk-tarif-row" style="padding:14px 0;">
+                  <div class="bk-tarif-lbl" style="font-size:1rem;">
+                    <span class="t-fr">Adulte — Formule Partielle</span>
+                    <span class="t-en">Adult — Partial Set Menu</span>
+                    <small class="t-fr" style="font-size:.8rem;">Entrée + Plat  ou  Plat + Dessert</small>
+                    <small class="t-en" style="font-size:.8rem;">Starter + Main  or  Main + Dessert</small>
+                  </div>
+                  <div class="bk-tarif-price" style="font-size:1.9rem;">12<span class="t-fr" style="font-size:.75rem;">&thinsp;€/pers.</span><span class="t-en" style="font-size:.75rem;">&thinsp;€/p.</span></div>
+                </div>
+                <div class="bk-tarif-row" style="padding:14px 0;">
+                  <div class="bk-tarif-lbl" style="font-size:1rem;">
+                    <span class="t-fr">Enfant (–12 ans) — Formule Complète</span>
+                    <span class="t-en">Child (under 12) — Full Set Menu</span>
+                    <small class="t-fr" style="font-size:.8rem;">Entrée + Plat + Dessert</small>
+                    <small class="t-en" style="font-size:.8rem;">Starter + Main + Dessert</small>
+                  </div>
+                  <div class="bk-tarif-price" style="font-size:1.9rem;">8<span class="t-fr" style="font-size:.75rem;">&thinsp;€/enf.</span><span class="t-en" style="font-size:.75rem;">&thinsp;€/ch.</span></div>
+                </div>
+                <div class="bk-tarif-row" style="padding:14px 0;">
+                  <div class="bk-tarif-lbl" style="font-size:1rem;">
+                    <span class="t-fr">Enfant (–12 ans) — Formule Partielle</span>
+                    <span class="t-en">Child (under 12) — Partial Set Menu</span>
+                    <small class="t-fr" style="font-size:.8rem;">Entrée + Plat  ou  Plat + Dessert</small>
+                    <small class="t-en" style="font-size:.8rem;">Starter + Main  or  Main + Dessert</small>
+                  </div>
+                  <div class="bk-tarif-price" style="font-size:1.9rem;">6<span class="t-fr" style="font-size:.75rem;">&thinsp;€/enf.</span><span class="t-en" style="font-size:.75rem;">&thinsp;€/ch.</span></div>
+                </div>
+              </div>
+              <div class="bk-notice" style="margin-top:20px;">
+                <p class="t-fr" style="font-size:.72rem;">ℹ Merci de déclarer toute allergie alimentaire avant la commande.</p>
+                <p class="t-en" style="font-size:.72rem;">ℹ Please declare any food allergies before ordering.</p>
+                <p class="t-fr" style="font-size:.72rem;">ℹ Tout le groupe choisit le même plat, entrée et dessert.</p>
+                <p class="t-en" style="font-size:.72rem;">ℹ All guests choose the same dish, starter and dessert.</p>
+                <p class="t-fr" style="font-size:.72rem;">ℹ Boissons non incluses. Toute demande supplémentaire sera facturée.</p>
+                <p class="t-en" style="font-size:.72rem;">ℹ Drinks not included. Additional requests charged separately.</p>
+              </div>
             </div>
-            <div class="tarif-desc t-fr">Entrée + Plat &nbsp;ou&nbsp; Plat + Dessert</div>
-            <div class="tarif-desc t-en">Starter + Main &nbsp;or&nbsp; Main + Dessert</div>
           </div>
+
+          <!-- ── SPREAD 2 : ENTRÉES ── -->
+          <div class="bk-spread" data-i="2">
+            <div class="bk-page bk-page-left bk-chapter bk-ch-olive">
+              <div class="bk-ch-roman">I</div>
+              <div class="bk-ch-name t-fr">Entrées</div>
+              <div class="bk-ch-name t-en">Starters</div>
+              <div class="bk-ch-rule"></div>
+              <div class="bk-ch-name-en t-fr">Pour bien commencer</div>
+              <div class="bk-ch-name-en t-en">To start beautifully</div>
+              <div class="bk-ch-icon">🥗</div>
+            </div>
+            <div class="bk-page bk-page-right bk-paper">
+              <div class="bk-pg-header">
+                <span class="bk-pg-eyebrow t-fr">Entrées</span>
+                <span class="bk-pg-eyebrow t-en">Starters</span>
+                <span class="bk-pg-title-en t-fr"> / Starters</span>
+              </div>
+              <ul class="bk-dishes">
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Salade Maïs Thon Haricot Riz</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Corn, Tuna &amp; Rice Salad</span></div>
+                  <div class="bk-dish-desc t-fr">Maïs fondant, thon en lamelles, haricots verts et riz basmati parfumé</div>
+                  <div class="bk-dish-desc t-en">Tender corn, flaked tuna, green beans and fragrant basmati rice</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Trio de Salades Marocaines</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Moroccan Salad Trio</span></div>
+                  <div class="bk-dish-desc t-fr">Zaalouk d'aubergines, taktouka de poivrons et carottes cumin</div>
+                  <div class="bk-dish-desc t-en">Aubergine zaalouk, pepper taktouka and cumin carrot salad</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Salade Mozzarella &amp; Tomates</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Mozzarella &amp; Tomato Salad</span></div>
+                  <div class="bk-dish-desc t-fr">Tomates gorgées de soleil, mozzarella fondante, basilic et huile d'olive</div>
+                  <div class="bk-dish-desc t-en">Sun-ripened tomatoes, melting mozzarella, fresh basil and olive oil</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Soupe Harira Marocaine</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Moroccan Harira Soup</span></div>
+                  <div class="bk-dish-desc t-fr">Potage ancestral aux lentilles, pois chiches, coriandre et citron</div>
+                  <div class="bk-dish-desc t-en">Ancient broth with lentils, chickpeas, coriander and lemon</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Velouté de Légumes</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Seasonal Vegetable Cream</span></div>
+                  <div class="bk-dish-desc t-fr">Crème onctueuse de légumes de saison, huile vierge et ciboulette</div>
+                  <div class="bk-dish-desc t-en">Silky seasonal vegetable cream with virgin oil and chives</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Salade Niçoise</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Niçoise Salad</span></div>
+                  <div class="bk-dish-desc t-fr">Thon, œuf mollet, olives noires, haricots verts et anchois marinés</div>
+                  <div class="bk-dish-desc t-en">Tuna, soft-boiled egg, black olives, green beans and marinated anchovies</div>
+                </li>
+              </ul>
+              <div class="bk-pg-num bk-pg-num-r">2</div>
+            </div>
+          </div>
+
+          <!-- ── SPREAD 3 : PLATS MAROCAINS (tous) ── -->
+          <div class="bk-spread" data-i="3">
+            <div class="bk-page bk-page-left bk-chapter bk-ch-bordeaux">
+              <div class="bk-ch-roman">II</div>
+              <div class="bk-ch-name t-fr">Plats Marocains</div>
+              <div class="bk-ch-name t-en">Moroccan Dishes</div>
+              <div class="bk-ch-rule"></div>
+              <div class="bk-ch-name-en t-fr">L'âme de Marrakech</div>
+              <div class="bk-ch-name-en t-en">The soul of Marrakech</div>
+              <div class="bk-ch-icon">🏺</div>
+            </div>
+            <div class="bk-page bk-page-right bk-paper">
+              <div class="bk-pg-header">
+                <span class="bk-pg-eyebrow t-fr">Plats Marocains</span>
+                <span class="bk-pg-eyebrow t-en">Moroccan Dishes</span>
+              </div>
+              <ul class="bk-dishes" style="gap:10px;">
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name">Couscous</span></div>
+                  <div class="bk-dish-desc t-fr">Semoule dorée à la vapeur, sept légumes de saison et bouillon au ras el hanout</div>
+                  <div class="bk-dish-desc t-en">Golden steamed semolina, seven seasonal vegetables and ras el hanout broth</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name">Seffa</span></div>
+                  <div class="bk-dish-desc t-fr">Vermicelles fondants à la cannelle, sucre glace, lait et raisins secs</div>
+                  <div class="bk-dish-desc t-en">Soft vermicelli with cinnamon, icing sugar, milk and raisins</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Tanjia Marrakchia</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Marrakech Tanjia</span></div>
+                  <div class="bk-dish-desc t-fr">Agneau confit de longues heures dans un fût d'argile, cumin et smen</div>
+                  <div class="bk-dish-desc t-en">Lamb slow-braised for hours in a clay amphora with cumin and smen</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Tajine Poulet &amp; Citron Confit</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Chicken &amp; Preserved Lemon Tajine</span></div>
+                  <div class="bk-dish-desc t-fr">Mijoté aux olives vertes, citron confit et safran de Taliouine</div>
+                  <div class="bk-dish-desc t-en">With green olives, preserved lemon and Taliouine saffron</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Tajine Bœuf &amp; Pruneaux</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Beef &amp; Prune Tajine</span></div>
+                  <div class="bk-dish-desc t-fr">Joue de bœuf fondante, pruneaux confits, miel et amandes grillées</div>
+                  <div class="bk-dish-desc t-en">Melt-in-the-mouth beef cheek, candied prunes, honey and toasted almonds</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Tajine Végétarien</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Vegetarian Tajine</span></div>
+                  <div class="bk-dish-desc t-fr">Légumes du jardin, pois chiches, amandes et épices douces</div>
+                  <div class="bk-dish-desc t-en">Garden vegetables, chickpeas, almonds and gentle spices</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Grillades de Poulet</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Grilled Chicken</span></div>
+                  <div class="bk-dish-desc t-fr">Cuisses marinées à la chermoula, grillées sur braises</div>
+                  <div class="bk-dish-desc t-en">Thighs marinated in chermoula, grilled over charcoal</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Grillades Mixtes</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Mixed Grill</span></div>
+                  <div class="bk-dish-desc t-fr">Brochettes de kefta et poulet, merguez maison</div>
+                  <div class="bk-dish-desc t-en">Kefta and chicken skewers and house merguez</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Pastilla Individuelle</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Individual Pastilla</span></div>
+                  <div class="bk-dish-desc t-fr">Feuilleté croustillant — Poulet (cannelle &amp; amandes) ou Poisson</div>
+                  <div class="bk-dish-desc t-en">Crispy pastry — Chicken (cinnamon &amp; almonds) or Fish</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ── SPREAD 4 : MÉDITERRANÉEN ── -->
+          <div class="bk-spread" data-i="4">
+            <div class="bk-page bk-page-left bk-chapter bk-ch-saffron">
+              <div class="bk-ch-roman">III</div>
+              <div class="bk-ch-name t-fr">Cuisine Méditerranéenne</div>
+              <div class="bk-ch-name t-en">Mediterranean Cuisine</div>
+              <div class="bk-ch-rule"></div>
+              <div class="bk-ch-name-en t-fr">Saveurs du bassin méditerranéen</div>
+              <div class="bk-ch-name-en t-en">Flavours of the Mediterranean</div>
+              <div class="bk-ch-icon">🍝</div>
+            </div>
+            <div class="bk-page bk-page-right bk-paper">
+              <div class="bk-pg-header">
+                <span class="bk-pg-eyebrow t-fr">Cuisine Méditerranéenne</span>
+                <span class="bk-pg-eyebrow t-en">Mediterranean Cuisine</span>
+              </div>
+              <ul class="bk-dishes">
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Pizza Margherita</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Margherita Pizza</span></div>
+                  <div class="bk-dish-desc t-fr">Base tomate maison, mozzarella filante et basilic frais</div>
+                  <div class="bk-dish-desc t-en">House tomato base, stretchy mozzarella and fresh basil</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Pizza Viande Hachée</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Minced Meat Pizza</span></div>
+                  <div class="bk-dish-desc t-fr">Viande hachée épicée, poivrons multicolores et oignons confits</div>
+                  <div class="bk-dish-desc t-en">Spiced minced meat, multicoloured peppers and candied onions</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Pâtes Bolognaise</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Bolognese Pasta</span></div>
+                  <div class="bk-dish-desc t-fr">Pappardelle al dente, sauce tomate mijotée et parmesan affiné</div>
+                  <div class="bk-dish-desc t-en">Al dente pappardelle, slow-cooked tomato sauce and aged parmesan</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Pâtes Champignons Crémeux</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Creamy Mushroom Pasta</span></div>
+                  <div class="bk-dish-desc t-fr">Tagliatelles, champignons sautés, crème légère et thym</div>
+                  <div class="bk-dish-desc t-en">Tagliatelles, sautéed mushrooms, light cream and thyme</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Gratin Viande Hachée</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Minced Meat Gratin</span></div>
+                  <div class="bk-dish-desc t-fr">Viande épicée sous béchamel gratinée au four</div>
+                  <div class="bk-dish-desc t-en">Spiced meat under golden oven-baked béchamel</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Gratin Poulet</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Chicken Gratin</span></div>
+                  <div class="bk-dish-desc t-fr">Effiloché de poulet, légumes fondants et béchamel maison dorée</div>
+                  <div class="bk-dish-desc t-en">Shredded chicken, melting vegetables and house béchamel baked golden</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ── SPREAD 5 : MENU ENFANT ── -->
+          <div class="bk-spread" data-i="5">
+            <div class="bk-page bk-page-left bk-chapter" style="background:var(--ink-900);">
+              <div class="bk-ch-roman" style="color:var(--sand-200);">IV</div>
+              <div class="bk-ch-name t-fr" style="color:var(--sand-100);">Menu Enfant</div>
+              <div class="bk-ch-name t-en" style="color:var(--sand-100);">Kids' Menu</div>
+              <div class="bk-ch-rule" style="background:var(--sand-400);"></div>
+              <div class="bk-ch-name-en t-fr" style="color:var(--sand-300);">Pour les petits aventuriers</div>
+              <div class="bk-ch-name-en t-en" style="color:var(--sand-300);">For the little adventurers</div>
+              <div class="bk-ch-icon">🧒</div>
+            </div>
+            <div class="bk-page bk-page-right bk-paper">
+              <div class="bk-pg-header">
+                <span class="bk-pg-eyebrow t-fr">IV · Menu Enfant</span>
+                <span class="bk-pg-eyebrow t-en">IV · Kids' Menu</span>
+              </div>
+              <ul class="bk-dishes">
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Cheeseburger &amp; Frites</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Cheeseburger &amp; Fries</span></div>
+                  <div class="bk-dish-desc t-fr">Steak haché juteux, cheddar fondu, pain brioché et frites maison</div>
+                  <div class="bk-dish-desc t-en">Juicy beef patty, melted cheddar, brioche bun and house fries</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Cordon Bleu &amp; Frites</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Cordon Bleu &amp; Fries</span></div>
+                  <div class="bk-dish-desc t-fr">Escalope de poulet dorée farcie au jambon et fromage fondant</div>
+                  <div class="bk-dish-desc t-en">Golden chicken escalope stuffed with ham and melting cheese</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Nuggets &amp; Frites</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Nuggets &amp; Fries</span></div>
+                  <div class="bk-dish-desc t-fr">Nuggets de poulet croustillants, sauce dip et frites maison</div>
+                  <div class="bk-dish-desc t-en">Crispy chicken nuggets, dipping sauce and house fries</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ── SPREAD 6 : DESSERTS ── -->
+          <div class="bk-spread" data-i="6">
+            <div class="bk-page bk-page-left bk-chapter" style="background:var(--bordeaux);">
+              <div class="bk-ch-roman" style="color:rgba(255,255,255,0.4);">V</div>
+              <div class="bk-ch-name t-fr" style="color:#fff;">Desserts</div>
+              <div class="bk-ch-name t-en" style="color:#fff;">Desserts</div>
+              <div class="bk-ch-rule" style="background:rgba(255,255,255,0.4);"></div>
+              <div class="bk-ch-name-en t-fr" style="color:rgba(255,255,255,0.75);">Douceurs pour finir en beauté</div>
+              <div class="bk-ch-name-en t-en" style="color:rgba(255,255,255,0.75);">Sweet endings to savour</div>
+              <div class="bk-ch-icon">🍮</div>
+            </div>
+            <div class="bk-page bk-page-right bk-paper" style="background:var(--sand-100);">
+              <div class="bk-pg-header">
+                <span class="bk-pg-eyebrow t-fr">V · Desserts</span>
+                <span class="bk-pg-eyebrow t-en">V · Desserts</span>
+              </div>
+              <ul class="bk-dishes" style="gap:10px;">
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Mhalabia</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Mhalabia</span></div>
+                  <div class="bk-dish-desc t-fr">Panna cotta orientale, fleur d'oranger, pistaches et eau de rose</div>
+                  <div class="bk-dish-desc t-en">Oriental panna cotta, orange blossom, pistachios and rose water</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Rouleaux Riz &amp; Cannelle</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Rice &amp; Cinnamon Rolls</span></div>
+                  <div class="bk-dish-desc t-fr">Feuilles de riz frites, miel de fleurs et cannelle</div>
+                  <div class="bk-dish-desc t-en">Fried rice paper rolls, flower honey and cinnamon</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Salade de Fruits de Saison</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Seasonal Fruit Salad</span></div>
+                  <div class="bk-dish-desc t-fr">Fruits frais du souk, jus d'orange et eau de fleur d'oranger</div>
+                  <div class="bk-dish-desc t-en">Fresh market fruits, orange juice and orange blossom water</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Biscuits Marocains &amp; Thé</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Moroccan Pastries &amp; Tea</span></div>
+                  <div class="bk-dish-desc t-fr">Cornes de gazelle et ghriyba avec le thé à la menthe de Marrakanda</div>
+                  <div class="bk-dish-desc t-en">Gazelle horns and ghriyba with Marrakanda's mint tea</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Tarte aux Pommes</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Apple Tart</span></div>
+                  <div class="bk-dish-desc t-fr">Pâte sablée maison, pommes confites, cannelle et coulis de caramel</div>
+                  <div class="bk-dish-desc t-en">Homemade shortcrust, candied apples, cinnamon and caramel coulis</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Crème Caramel</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Crème Caramel</span></div>
+                  <div class="bk-dish-desc t-fr">Flan onctueux à la vanille, caramel doré et sel de Guérande</div>
+                  <div class="bk-dish-desc t-en">Silky vanilla flan, golden caramel and a hint of Guérande salt</div>
+                </li>
+                <li class="bk-dish">
+                  <div><span class="bk-dish-name t-fr">Fruits de Saison</span><span class="bk-dish-sep">·</span><span class="bk-dish-name-en t-en">Seasonal Fruits</span></div>
+                  <div class="bk-dish-desc t-fr">La sélection du jour — fruits de la palmeraie et des souks</div>
+                  <div class="bk-dish-desc t-en">Today's selection — fruits from the palm grove and souks</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div><!-- /bk-spreads -->
+
+        <!-- Flipper -->
+        <div class="bk-flipper" id="bkFlipper">
+          <div class="bk-flipper-face bk-flipper-front" id="bkFlipFront"></div>
+          <div class="bk-flipper-face bk-flipper-back" id="bkFlipBack"></div>
         </div>
 
-        <div class="menu-notice">
-          <p class="t-fr">ℹ&ensp;Merci de déclarer toute allergie alimentaire avant la commande.</p>
-          <p class="t-en">ℹ&ensp;Please declare any food allergies before ordering.</p>
-          <p class="t-fr">ℹ&ensp;Tout le groupe choisit le même plat, entrée et dessert.</p>
-          <p class="t-en">ℹ&ensp;All guests at the table choose the same dish, starter and dessert.</p>
-          <p class="t-fr">ℹ&ensp;Toute demande supplémentaire fera l'objet d'une facturation additionnelle.</p>
-          <p class="t-en">ℹ&ensp;Any additional requests will be charged separately.</p>
-        </div>
+        <!-- Nav -->
+        <button class="bk-btn bk-btn-prev" id="bkPrev" disabled aria-label="Page précédente">‹</button>
+        <button class="bk-btn bk-btn-next" id="bkNext" aria-label="Page suivante">›</button>
+
+      </div><!-- /book-scene -->
+
+      <!-- Dots -->
+      <div class="bk-dots" id="bkDots">
+        <span class="bk-dot bk-on" data-to="0"></span>
+        <span class="bk-dot" data-to="1"></span>
+        <span class="bk-dot" data-to="2"></span>
+        <span class="bk-dot" data-to="3"></span>
+        <span class="bk-dot" data-to="4"></span>
+        <span class="bk-dot" data-to="5"></span>
+        <span class="bk-dot" data-to="6"></span>
       </div>
+
+      <!-- Download -->
+      <div class="menu-dl" style="position:relative;z-index:10;">
+        <button onclick="printMenu()" class="menu-dl-btn" aria-label="Télécharger le menu PDF">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="t-fr">Télécharger le menu PDF</span>
+          <span class="t-en">Download Menu PDF</span>
+        </button>
+      </div>
+
+        </div><!-- /menu-book-side -->
+
+        <!-- ── MODULE RÉSERVATION ── -->
+        <aside class="res-panel" id="resPanel">
+
+          <!-- 1 · SÉLECTION DES PLATS -->
+          <div class="res-mod">
+
+            <div class="res-mod-title">
+              <span class="t-fr">Votre sélection</span>
+              <span class="t-en">Your selection</span>
+            </div>
+
+            <div class="res-field">
+              <label class="res-lbl" for="resEntree">
+                <span class="t-fr">Entrée</span><span class="t-en">Starter</span>
+              </label>
+              <select class="res-sel" id="resEntree">
+                <option value="">— Aucune / None —</option>
+                <option>Salade Maïs Thon Haricot Riz</option>
+                <option>Trio de Salades Marocaines</option>
+                <option>Salade Mozzarella &amp; Tomates</option>
+                <option>Soupe Harira Marocaine</option>
+                <option>Velouté de Légumes</option>
+                <option>Salade Niçoise</option>
+              </select>
+            </div>
+
+            <div class="res-field">
+              <label class="res-lbl" for="resPlat">
+                <span class="t-fr">Plat principal</span><span class="t-en">Main Course</span>
+              </label>
+              <select class="res-sel" id="resPlat">
+                <option value="">— Choisir / Choose —</option>
+                <optgroup label="Marocain">
+                  <option>Couscous</option>
+                  <option>Seffa</option>
+                  <option>Tanjia Marrakchia</option>
+                  <option>Tajine Poulet &amp; Citron Confit</option>
+                  <option>Tajine Bœuf &amp; Pruneaux</option>
+                  <option>Tajine Végétarien</option>
+                  <option>Grillades de Poulet</option>
+                  <option>Grillades Mixtes</option>
+                  <option>Pastilla Individuelle</option>
+                </optgroup>
+                <optgroup label="Méditerranéen">
+                  <option>Pizza Margherita</option>
+                  <option>Pizza Viande Hachée</option>
+                  <option>Pâtes Bolognaise</option>
+                  <option>Pâtes Champignons Crémeux</option>
+                  <option>Gratin Viande Hachée</option>
+                  <option>Gratin Poulet</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="res-field" id="fieldPlatEnfant" style="display:none;">
+              <label class="res-lbl" for="resPlatEnfant">
+                <span class="t-fr">Plat enfant</span><span class="t-en">Kids' main</span>
+              </label>
+              <select class="res-sel" id="resPlatEnfant">
+                <option value="">— Choisir / Choose —</option>
+                <option>Cheeseburger &amp; Frites</option>
+                <option>Cordon Bleu &amp; Frites</option>
+                <option>Nuggets &amp; Frites</option>
+              </select>
+            </div>
+
+            <div class="res-field">
+              <label class="res-lbl" for="resDessert">Dessert</label>
+              <select class="res-sel" id="resDessert">
+                <option value="">— Aucun / None —</option>
+                <option>Mhalabia</option>
+                <option>Rouleaux Riz &amp; Cannelle</option>
+                <option>Salade de Fruits de Saison</option>
+                <option>Biscuits Marocains &amp; Thé</option>
+                <option>Tarte aux Pommes</option>
+                <option>Crème Caramel</option>
+                <option>Fruits de Saison</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2 · CONVIVES & FORMULE -->
+          <div class="res-mod">
+            <div class="res-mod-title">
+              <span class="t-fr">Convives &amp; Formule</span>
+              <span class="t-en">Guests &amp; Formula</span>
+            </div>
+
+            <div class="res-counter-row">
+              <label class="res-lbl" style="margin-bottom:0;">
+                <span class="t-fr">Adultes</span><span class="t-en">Adults</span>
+              </label>
+              <div class="res-counter-wrap">
+                <button type="button" class="res-adj" onclick="resAdj('adults',-1)">−</button>
+                <span class="res-cnt" id="cntAdults">0</span>
+                <button type="button" class="res-adj" onclick="resAdj('adults',1)">+</button>
+              </div>
+            </div>
+            <div class="res-radios" id="formulaAdultWrap">
+              <label>
+                <input type="radio" name="formulaAdult" value="full" checked onchange="resCalc()">
+                <span><span class="t-fr">Formule Complète — 15 €/pers.</span><span class="t-en">Full Menu — 15 €/p.</span></span>
+              </label>
+              <label>
+                <input type="radio" name="formulaAdult" value="partial" onchange="resCalc()">
+                <span><span class="t-fr">Formule Partielle — 12 €/pers.</span><span class="t-en">Partial Menu — 12 €/p.</span></span>
+              </label>
+            </div>
+
+            <div class="res-counter-row mt">
+              <label class="res-lbl" style="margin-bottom:0;">
+                <span class="t-fr">Enfants (−12 ans)</span><span class="t-en">Children (under 12)</span>
+              </label>
+              <div class="res-counter-wrap">
+                <button type="button" class="res-adj" onclick="resAdj('children',-1)">−</button>
+                <span class="res-cnt" id="cntChildren">0</span>
+                <button type="button" class="res-adj" onclick="resAdj('children',1)">+</button>
+              </div>
+            </div>
+            <div class="res-radios" id="formulaChildWrap">
+              <label>
+                <input type="radio" name="formulaChild" value="full" checked onchange="resCalc()">
+                <span><span class="t-fr">Formule Complète — 8 €/enf.</span><span class="t-en">Full Menu — 8 €/ch.</span></span>
+              </label>
+              <label>
+                <input type="radio" name="formulaChild" value="partial" onchange="resCalc()">
+                <span><span class="t-fr">Formule Partielle — 6 €/enf.</span><span class="t-en">Partial Menu — 6 €/ch.</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3 · DATE -->
+          <div class="res-mod">
+            <div class="res-mod-title">
+              <span class="t-fr">Date souhaitée</span>
+              <span class="t-en">Preferred Date</span>
+            </div>
+            <div class="res-date-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <input type="date" class="res-date-input" id="resDate">
+            </div>
+          </div>
+
+          <!-- 4 · TOTAL -->
+          <div class="res-mod res-total-mod">
+            <div class="res-mod-title">
+              <span class="t-fr">Total estimé</span>
+              <span class="t-en">Estimated Total</span>
+            </div>
+            <div id="resBreakdown">
+              <span class="res-empty-msg t-fr">Ajoutez des convives pour voir le total.</span>
+              <span class="res-empty-msg t-en">Add guests to see the total.</span>
+            </div>
+            <div class="res-grand-total" id="resTotalAmount">0 €</div>
+          </div>
+
+          <!-- WHATSAPP -->
+          <button type="button" class="res-wa-btn" onclick="resSendWa()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span class="t-fr">Envoyer via WhatsApp</span>
+            <span class="t-en">Send via WhatsApp</span>
+          </button>
+          <p class="res-note">
+            <span class="t-fr">Nous confirmerons votre réservation sous 24h.</span>
+            <span class="t-en">We'll confirm your reservation within 24h.</span>
+          </p>
+
+        </aside>
+      </div><!-- /menu-layout -->
 
     </div>
   </section>
@@ -877,6 +1769,7 @@
 
         <div class="act-card rv">
           <div class="act-bar" style="background: var(--clay)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Quads.jpg" alt="Quad Marrakech">
           <div class="act-body">
             <div class="act-icon">🏍️</div>
             <div class="act-name t-fr">Quad</div>
@@ -898,6 +1791,7 @@
 
         <div class="act-card rv rv-d1">
           <div class="act-bar" style="background: var(--bordeaux)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Buggy.jpg" alt="Buggy Marrakech">
           <div class="act-body">
             <div class="act-icon">🚙</div>
             <div class="act-name">Buggy</div>
@@ -918,6 +1812,7 @@
 
         <div class="act-card rv rv-d2">
           <div class="act-bar" style="background: var(--saffron-600)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Agafay%20Dejeuner%20dinner.png" alt="Agafay déjeuner dîner" style="object-position: center 60%;">
           <div class="act-body">
             <div class="act-icon">🏜️</div>
             <div class="act-name t-fr">Agafay — Déjeuner / Dîner</div>
@@ -939,6 +1834,7 @@
 
         <div class="act-card rv">
           <div class="act-bar" style="background: var(--olive-700)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Transport.png" alt="Transport Marrakech">
           <div class="act-body">
             <div class="act-icon">🚐</div>
             <div class="act-name t-fr">Transport</div>
@@ -960,6 +1856,7 @@
 
         <div class="act-card rv rv-d1">
           <div class="act-bar" style="background: var(--pool-700)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Massage%20%C3%A0%20domicile.jpg" alt="Massage à domicile">
           <div class="act-body">
             <div class="act-icon">💆</div>
             <div class="act-name t-fr">Massage à domicile</div>
@@ -981,6 +1878,7 @@
 
         <div class="act-card rv rv-d2">
           <div class="act-bar" style="background: #c0392b"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Cracheur%20de%20feu.jpg" alt="Cracheur de feu">
           <div class="act-body">
             <div class="act-icon">🔥</div>
             <div class="act-name t-fr">Cracheur de feu</div>
@@ -1000,6 +1898,7 @@
 
         <div class="act-card rv">
           <div class="act-bar" style="background: #8e44ad"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Danseuse%20orientale.jpg" alt="Danseuse orientale">
           <div class="act-body">
             <div class="act-icon">💃</div>
             <div class="act-name t-fr">Danseuses orientales</div>
@@ -1019,6 +1918,7 @@
 
         <div class="act-card rv rv-d1">
           <div class="act-bar" style="background: var(--saffron)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Gnawa.png" alt="Gnawa Marrakech">
           <div class="act-body">
             <div class="act-icon">🥁</div>
             <div class="act-name">Gnawa</div>
@@ -1037,6 +1937,7 @@
 
         <div class="act-card rv rv-d2">
           <div class="act-bar" style="background: var(--pool)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Saxophonist.jpg" alt="Saxophoniste">
           <div class="act-body">
             <div class="act-icon">🎷</div>
             <div class="act-name t-fr">Saxophoniste</div>
@@ -1058,6 +1959,7 @@
 
         <div class="act-card rv">
           <div class="act-bar" style="background: var(--bordeaux-700)"></div>
+          <img class="act-img" src="Photos%20activit%C3%A9s/Reception%20invit%C3%A9s.png" alt="Réception d'invités">
           <div class="act-body">
             <div class="act-icon">🥂</div>
             <div class="act-name t-fr">Réception d'invités</div>
@@ -1135,10 +2037,18 @@
   ============================================================ -->
   <footer class="footer">
     <div class="wrap footer-inner">
-      <div>
-        <div class="footer-brand">MARRAKANDA</div>
-        <div class="footer-tag t-fr">Maison d'hôte de luxe · Marrakech</div>
-        <div class="footer-tag t-en">Luxury Guest House · Marrakech</div>
+      <div style="display:flex;align-items:center;gap:13px">
+        <svg viewBox="0 0 40 40" width="24" height="24" style="color:var(--saffron-600);flex-shrink:0" aria-hidden="true">
+          <g fill="currentColor">
+            <rect x="8" y="8" width="24" height="24"/>
+            <rect x="8" y="8" width="24" height="24" transform="rotate(45 20 20)"/>
+          </g>
+        </svg>
+        <div>
+          <div class="footer-brand">MARRAKANDA</div>
+          <div class="footer-tag t-fr">Maison d'hôte de luxe · Marrakech</div>
+          <div class="footer-tag t-en">Luxury Guest House · Marrakech</div>
+        </div>
       </div>
       <div class="footer-copy t-fr">© 2025 Marrakanda · Tous droits réservés</div>
       <div class="footer-copy t-en">© 2025 Marrakanda · All rights reserved</div>
@@ -1180,18 +2090,277 @@
       observer.observe(el);
     });
 
+    /* --- Print Menu --- */
+    function printMenu() {
+      var el = document.getElementById('printMenu');
+      el.style.display = 'block';
+      setTimeout(function() {
+        window.print();
+        setTimeout(function() { el.style.display = 'none'; }, 500);
+      }, 120);
+    }
+
+    /* --- Book Flip --- */
+    (function () {
+      var spreads  = Array.from(document.querySelectorAll('.bk-spread'));
+      var flipper  = document.getElementById('bkFlipper');
+      var flipFront= document.getElementById('bkFlipFront');
+      var flipBack = document.getElementById('bkFlipBack');
+      var prevBtn  = document.getElementById('bkPrev');
+      var nextBtn  = document.getElementById('bkNext');
+      var dots     = Array.from(document.querySelectorAll('.bk-dot'));
+      var current  = 0;
+      var total    = spreads.length;
+      var busy     = false;
+
+      function applyPage(src, target) {
+        target.innerHTML = src.innerHTML;
+        /* transfer styling classes */
+        var keep = ['bk-endpaper','bk-cover','bk-chapter','bk-ch-clay','bk-ch-bordeaux',
+                    'bk-ch-saffron','bk-ch-olive','bk-ch-ink','bk-paper','bk-closing'];
+        keep.forEach(function(c){ if(src.classList.contains(c)) target.classList.add(c); });
+        if (src.getAttribute('style')) target.style.cssText = src.getAttribute('style');
+      }
+
+      function clearPage(target) {
+        target.innerHTML = '';
+        target.removeAttribute('style');
+        target.className = target.id === 'bkFlipFront'
+          ? 'bk-flipper-face bk-flipper-front'
+          : 'bk-flipper-face bk-flipper-back';
+      }
+
+      function sync() {
+        spreads.forEach(function(s,i){ s.classList.toggle('bk-spread-active', i===current); });
+        dots.forEach(function(d,i){ d.classList.toggle('bk-on', i===current); });
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+      }
+
+      function flip(dir) {
+        if (busy) return;
+        var next = current + dir;
+        if (next < 0 || next >= total) return;
+        busy = true;
+
+        var currSpread = spreads[current];
+        var nextSpread = spreads[next];
+
+        clearPage(flipFront); clearPage(flipBack);
+
+        if (dir === 1) {
+          /* forward: flipper on right side, front=current-right, back=next-left */
+          applyPage(currSpread.querySelector('.bk-page-right'), flipFront);
+          applyPage(nextSpread.querySelector('.bk-page-left'),  flipBack);
+          flipper.style.left = '50%';
+          flipper.style.transformOrigin = 'left center';
+          flipper.style.transition = 'none';
+          flipper.style.transform  = 'rotateY(0deg)';
+          flipper.classList.add('bk-on');
+          /* show next spread but hide its left page (flipper shows it) */
+          nextSpread.classList.add('bk-spread-active');
+          nextSpread.querySelector('.bk-page-left').style.visibility = 'hidden';
+          currSpread.classList.remove('bk-spread-active');
+          requestAnimationFrame(function(){ requestAnimationFrame(function(){
+            flipper.style.transition = 'transform .85s cubic-bezier(.645,.045,.355,1)';
+            flipper.style.transform  = 'rotateY(-180deg)';
+          }); });
+        } else {
+          /* backward: flipper on left side, front=current-left, back=prev-right */
+          applyPage(currSpread.querySelector('.bk-page-left'),  flipFront);
+          applyPage(nextSpread.querySelector('.bk-page-right'), flipBack);
+          flipper.style.left = '0%';
+          flipper.style.transformOrigin = 'right center';
+          flipper.style.transition = 'none';
+          flipper.style.transform  = 'rotateY(0deg)';
+          flipper.classList.add('bk-on');
+          nextSpread.classList.add('bk-spread-active');
+          nextSpread.querySelector('.bk-page-right').style.visibility = 'hidden';
+          currSpread.classList.remove('bk-spread-active');
+          requestAnimationFrame(function(){ requestAnimationFrame(function(){
+            flipper.style.transition = 'transform .85s cubic-bezier(.645,.045,.355,1)';
+            flipper.style.transform  = 'rotateY(180deg)';
+          }); });
+        }
+
+        setTimeout(function(){
+          flipper.classList.remove('bk-on');
+          /* restore hidden page */
+          nextSpread.querySelector(dir===1 ? '.bk-page-left' : '.bk-page-right').style.visibility = '';
+          current = next;
+          sync();
+          busy = false;
+        }, 900);
+      }
+
+      prevBtn.addEventListener('click', function(){ flip(-1); });
+      nextBtn.addEventListener('click', function(){ flip(1); });
+      dots.forEach(function(d){
+        d.addEventListener('click', function(){
+          var to = parseInt(d.getAttribute('data-to'), 10);
+          if (to > current) flip(1);
+          else if (to < current) flip(-1);
+        });
+      });
+
+      sync();
+    })();
+
     /* --- QR Code --- */
-    QRCode.toCanvas(
-      document.getElementById('qr-canvas'),
-      'WIFI:T:WPA;S:Indoor Wifi;P:Marrakech2025;;',
-      {
-        width: 172,
-        margin: 2,
-        color: { dark: '#211810', light: '#ffffff' }
-      },
-      function(err) { if (err) console.warn('QR:', err); }
-    );
+    try {
+      QRCode.toCanvas(
+        document.getElementById('qr-canvas'),
+        'WIFI:T:WPA;S:Indoor Wifi;P:Marrakech2025;;',
+        {
+          width: 172,
+          margin: 2,
+          color: { dark: '#211810', light: '#ffffff' }
+        },
+        function(err) { if (err) console.warn('QR:', err); }
+      );
+    } catch(e) { console.warn('QRCode non chargé:', e); }
+
+    /* ── RESERVATION PANEL ── */
+    var resGuests = { adults: 0, children: 0 };
+
+    function resAdj(who, d) {
+      resGuests[who] = Math.max(0, resGuests[who] + d);
+      document.getElementById(who === 'adults' ? 'cntAdults' : 'cntChildren').textContent = resGuests[who];
+      document.getElementById('formulaAdultWrap').classList.toggle('visible', resGuests.adults > 0);
+      document.getElementById('formulaChildWrap').classList.toggle('visible', resGuests.children > 0);
+      document.getElementById('fieldPlatEnfant').style.display = resGuests.children > 0 ? 'block' : 'none';
+      resCalc();
+    }
+
+    function resCalc() {
+      var a = resGuests.adults, c = resGuests.children;
+      var fa = document.querySelector('input[name="formulaAdult"]:checked');
+      var fc = document.querySelector('input[name="formulaChild"]:checked');
+      var pa = (fa && fa.value === 'partial') ? 12 : 15;
+      var pc = (fc && fc.value === 'partial') ? 6  : 8;
+      var ta = a * pa, tc = c * pc, grand = ta + tc;
+      var bd  = document.getElementById('resBreakdown');
+      var amt = document.getElementById('resTotalAmount');
+      if (a === 0 && c === 0) {
+        bd.innerHTML = '<span class="res-empty-msg t-fr">Ajoutez des convives pour voir le total.</span>'
+                     + '<span class="res-empty-msg t-en">Add guests to see the total.</span>';
+        amt.textContent = '0 €';
+        return;
+      }
+      var html = '';
+      if (a > 0) html += '<div class="res-bd-row"><span>' + a + ' adulte' + (a > 1 ? 's' : '') + ' × ' + pa + ' €</span><span>' + ta + ' €</span></div>';
+      if (c > 0) html += '<div class="res-bd-row"><span>' + c + ' enfant' + (c > 1 ? 's' : '') + ' × ' + pc + ' €</span><span>' + tc + ' €</span></div>';
+      bd.innerHTML = html;
+      amt.textContent = grand + ' €';
+    }
+
+    function resSendWa() {
+      var a = resGuests.adults, c = resGuests.children;
+      if (a + c === 0) { alert('Veuillez ajouter au moins un convive.'); return; }
+      var dateEl = document.getElementById('resDate');
+      if (!dateEl.value) { alert('Veuillez choisir une date.'); return; }
+      var dp = dateEl.value.split('-');
+      var dateStr = dp[2] + '/' + dp[1] + '/' + dp[0];
+      var entree    = document.getElementById('resEntree').value;
+      var plat      = document.getElementById('resPlat').value;
+      var platEnf   = document.getElementById('resPlatEnfant').value;
+      var dessert   = document.getElementById('resDessert').value;
+      var fa = document.querySelector('input[name="formulaAdult"]:checked');
+      var fc = document.querySelector('input[name="formulaChild"]:checked');
+      var pa = (fa && fa.value === 'partial') ? 12 : 15;
+      var pc = (fc && fc.value === 'partial') ? 6  : 8;
+      var faLbl = pa === 15 ? 'Formule Complète (15 €/pers.)' : 'Formule Partielle (12 €/pers.)';
+      var fcLbl = pc === 8  ? 'Formule Complète (8 €/enf.)'  : 'Formule Partielle (6 €/enf.)';
+      var grand = a * pa + c * pc;
+      var msg = '🍽 *Réservation Marrakanda*\n\n';
+      msg += '📅 Date : ' + dateStr + '\n\n';
+      msg += '👥 *Convives :*\n';
+      if (a > 0) msg += '  • ' + a + ' adulte' + (a > 1 ? 's' : '') + ' — ' + faLbl + '\n';
+      if (c > 0) msg += '  • ' + c + ' enfant' + (c > 1 ? 's' : '') + ' — ' + fcLbl + '\n';
+      msg += '\n🥗 *Sélection :*\n';
+      if (entree)  msg += '  • Entrée : ' + entree + '\n';
+      if (plat)    msg += '  • Plat : ' + plat + '\n';
+      if (c > 0 && platEnf) msg += '  • Plat enfant : ' + platEnf + '\n';
+      if (dessert) msg += '  • Dessert : ' + dessert + '\n';
+      msg += '\n💰 *Total estimé : ' + grand + ' €*\n_(Boissons non incluses)_';
+      // ← Remplacez par votre numéro WhatsApp (sans +, sans espaces, ex: 212612345678)
+      var phone = '212XXXXXXXXX';
+      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    // Date min = aujourd'hui
+    (function() {
+      var d = document.getElementById('resDate');
+      if (d) { d.min = new Date().toISOString().split('T')[0]; }
+    })();
   </script>
+
+  <!-- Menu imprimable (masqué, visible uniquement à l'impression) -->
+  <div id="printMenu" class="print-menu" style="display:none">
+    <h1>Marrakanda</h1>
+    <div class="pm-sub">Notre Menu · Marrakech · Maison d'hôte</div>
+    <div class="pm-cols">
+      <div>
+        <div class="pm-section">
+          <div class="pm-cat">I · Entrées / Starters</div>
+          <div class="pm-dish"><div class="pm-dish-name">Salade Maïs Thon Haricot Riz</div><div class="pm-dish-desc">Maïs fondant, thon en lamelles, haricots verts et riz basmati parfumé</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Trio de Salades Marocaines</div><div class="pm-dish-desc">Zaalouk d'aubergines, taktouka de poivrons et carottes cumin</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Salade Mozzarella &amp; Tomates</div><div class="pm-dish-desc">Tomates gorgées de soleil, mozzarella fondante, basilic et huile d'olive</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Soupe Harira Marocaine</div><div class="pm-dish-desc">Potage ancestral aux lentilles, pois chiches, coriandre et citron</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Velouté de Légumes</div><div class="pm-dish-desc">Crème onctueuse de légumes de saison, huile vierge et ciboulette</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Salade Niçoise</div><div class="pm-dish-desc">Thon, œuf mollet, olives noires, haricots verts et anchois marinés</div></div>
+        </div>
+        <div class="pm-section">
+          <div class="pm-cat">II · Plats Marocains / Moroccan Dishes</div>
+          <div class="pm-dish"><div class="pm-dish-name">Couscous</div><div class="pm-dish-desc">Semoule dorée à la vapeur, sept légumes de saison et bouillon au ras el hanout</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Seffa</div><div class="pm-dish-desc">Vermicelles fondants à la cannelle, sucre glace, lait et raisins secs</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Tanjia Marrakchia</div><div class="pm-dish-desc">Agneau confit de longues heures dans un fût d'argile, cumin et smen</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Tajine Poulet &amp; Citron Confit</div><div class="pm-dish-desc">Mijoté aux olives vertes, citron confit et safran de Taliouine</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Tajine Bœuf &amp; Pruneaux</div><div class="pm-dish-desc">Joue de bœuf fondante, pruneaux confits, miel et amandes grillées</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Tajine Végétarien</div><div class="pm-dish-desc">Légumes du jardin, pois chiches, amandes et épices douces</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Grillades de Poulet</div><div class="pm-dish-desc">Cuisses marinées à la chermoula, grillées sur braises</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Grillades Mixtes</div><div class="pm-dish-desc">Brochettes de kefta et poulet, côtelettes et merguez maison</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Pastilla Individuelle</div><div class="pm-dish-desc">Feuilleté croustillant — Poulet (cannelle &amp; amandes) ou Poisson</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="pm-section">
+          <div class="pm-cat">III · Plats Occidentaux / Western Dishes</div>
+          <div class="pm-dish"><div class="pm-dish-name">Pizza Margherita</div><div class="pm-dish-desc">Base tomate maison, mozzarella filante et basilic frais</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Pizza Végétarienne</div><div class="pm-dish-desc">Légumes grillés, olives noires et chèvre fondant sur crème citron</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Pizza Viande Hachée</div><div class="pm-dish-desc">Viande hachée épicée, poivrons multicolores et oignons confits</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Pâtes Bolognaise</div><div class="pm-dish-desc">Pappardelle al dente, sauce tomate mijotée et parmesan affiné</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Pâtes Champignons Crémeux</div><div class="pm-dish-desc">Tagliatelles, champignons sautés, crème légère et thym</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Gratin Viande Hachée</div><div class="pm-dish-desc">Viande épicée sous béchamel gratinée au four</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Gratin Poulet</div><div class="pm-dish-desc">Effiloché de poulet, légumes fondants et béchamel maison dorée</div></div>
+        </div>
+        <div class="pm-section">
+          <div class="pm-cat">IV · Menu Enfant / Kids' Menu</div>
+          <div class="pm-dish"><div class="pm-dish-name">Cheeseburger &amp; Frites</div><div class="pm-dish-desc">Steak haché juteux, cheddar fondu, pain brioché et frites maison</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Cordon Bleu &amp; Frites</div><div class="pm-dish-desc">Escalope de poulet dorée farcie au jambon et fromage fondant</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Nuggets &amp; Frites</div><div class="pm-dish-desc">Nuggets de poulet croustillants, sauce dip et frites maison</div></div>
+        </div>
+        <div class="pm-section">
+          <div class="pm-cat">V · Desserts</div>
+          <div class="pm-dish"><div class="pm-dish-name">Mhalabia</div><div class="pm-dish-desc">Panna cotta orientale, fleur d'oranger, pistaches et eau de rose</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Rouleaux Riz &amp; Cannelle</div><div class="pm-dish-desc">Feuilles de riz frites, miel de fleurs et cannelle</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Salade de Fruits de Saison</div><div class="pm-dish-desc">Fruits frais du souk, jus d'orange et fleur d'oranger</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Biscuits Marocains &amp; Thé</div><div class="pm-dish-desc">Cornes de gazelle et ghriyba avec le thé à la menthe de Marrakanda</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Tarte aux Pommes</div><div class="pm-dish-desc">Pâte sablée maison, pommes confites, cannelle et coulis de caramel</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Crème Caramel</div><div class="pm-dish-desc">Flan onctueux à la vanille, caramel doré et sel de Guérande</div></div>
+          <div class="pm-dish"><div class="pm-dish-name">Fruits de Saison</div><div class="pm-dish-desc">La sélection du jour — fruits de la palmeraie et des souks</div></div>
+        </div>
+        <div class="pm-section pm-tarifs">
+          <div class="pm-cat">VI · Formules &amp; Tarifs</div>
+          <div class="pm-tarif-row"><span>Adulte — Formule Complète (Entrée + Plat + Dessert)</span><strong>15 €/pers.</strong></div>
+          <div class="pm-tarif-row"><span>Adulte — Formule Partielle (Entrée+Plat ou Plat+Dessert)</span><strong>12 €/pers.</strong></div>
+          <div class="pm-tarif-row"><span>Enfant –12 ans — Formule Complète</span><strong>8 €/enf.</strong></div>
+          <div class="pm-tarif-row"><span>Enfant –12 ans — Formule Partielle</span><strong>6 €/enf.</strong></div>
+          <div class="pm-notice">Boissons non incluses · Merci de déclarer toute allergie alimentaire avant la commande.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
