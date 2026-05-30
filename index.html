@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     /* ============================================================
@@ -480,9 +481,9 @@
       margin-bottom: 10px; line-height: 1.2;
     }
     .act-desc {
-      font-family: var(--f-serif);
-      font-size: 1rem; font-style: italic;
-      color: var(--ink-700); line-height: 1.6; flex: 1;
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .88rem; color: var(--bordeaux);
+      line-height: 1.45; margin-top: 3px; flex: 1;
     }
     .act-footer {
       display: flex; align-items: flex-end;
@@ -514,11 +515,14 @@
 
     /* Transport info btn */
     .transport-info-btn {
-      background: none; border: none; cursor: pointer; padding: 0;
-      color: var(--olive-700); display: flex; align-items: center;
-      flex-shrink: 0; opacity: .75; transition: opacity .2s;
+      background: none; border: none; cursor: pointer;
+      padding: 5px 12px; border-radius: 100px;
+      font-family: var(--f-sans); font-size: .67rem;
+      font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--olive-700); border: 1px solid var(--olive-700);
+      flex-shrink: 0; opacity: .8; transition: opacity .2s, background .2s;
     }
-    .transport-info-btn:hover { opacity: 1; }
+    .transport-info-btn:hover { opacity: 1; background: rgba(90,100,60,.06); }
 
     /* Transport modal */
     .transport-modal {
@@ -599,32 +603,40 @@
     .wifi-section .sec-lead  { color: var(--sand-400); margin: 0 auto; }
     .wifi-section .sec-head  { margin-bottom: 52px; }
 
+    .wifi-cards {
+      display: flex; justify-content: center; gap: 28px; flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
     .wifi-card {
-      max-width: 400px; margin: 0 auto;
+      width: 260px;
       background: rgba(255,255,255,.04);
       border: 1px solid rgba(255,255,255,.1);
       border-radius: 20px;
-      padding: 48px 40px 44px;
+      padding: 36px 28px 32px;
+      display: flex; flex-direction: column; align-items: center;
     }
     .qr-wrap {
       width: 196px; height: 196px;
       background: white; border-radius: 12px;
-      margin: 0 auto 28px;
+      margin: 0 auto 20px;
       display: flex; align-items: center; justify-content: center;
       padding: 10px;
     }
-    .qr-wrap canvas { display: block; }
+    .qr-wrap img { display: block; border-radius: 4px; }
     .wifi-ssid {
       font-family: var(--f-display);
-      font-size: 1.35rem; color: white; margin-bottom: 8px;
+      font-size: 1.25rem; color: white; text-align: center;
+    }
+    .wifi-shared {
+      max-width: 480px; margin: 0 auto; text-align: center;
     }
     .wifi-inst {
       font-family: var(--f-serif);
       font-size: 1.02rem; font-style: italic;
       color: var(--sand-400); margin-bottom: 28px; line-height: 1.6;
     }
-    .wifi-steps { list-style: none; display: flex; flex-direction: column; gap: 13px; text-align: left; }
-    .wifi-steps li { display: flex; gap: 12px; align-items: flex-start; }
+    .wifi-steps { list-style: none; display: flex; flex-direction: column; gap: 13px; text-align: center; align-items: center; }
+    .wifi-steps li { display: flex; gap: 12px; align-items: center; justify-content: center; }
     .wifi-steps li span:not(.step-n) {
       font-family: var(--f-sans); font-size: .8rem;
       color: var(--sand-400); line-height: 1.5;
@@ -635,6 +647,85 @@
       font-size: .65rem; font-weight: 600; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       margin-top: 1px;
+    }
+
+    /* ============================================================
+       DISCOVER SECTION
+    ============================================================ */
+    .disc-section {
+      background: var(--sand-50);
+      padding: 104px 0;
+    }
+    .disc-section .sec-eyebrow { color: var(--clay); justify-content: center; }
+    .disc-section .sec-eyebrow::before,
+    .disc-section .sec-eyebrow::after { background: var(--clay); }
+    .disc-section .sec-head { text-align: center; margin-bottom: 48px; }
+
+    .disc-filters {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 52px;
+    }
+    .disc-filter-btn {
+      font-family: var(--f-sans); font-size: .6rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: 9px 20px; border-radius: 100px;
+      border: 1px solid var(--sand-300);
+      background: transparent; color: var(--ink-700);
+      cursor: pointer; transition: background .22s, border-color .22s, color .22s;
+    }
+    .disc-filter-btn:hover { border-color: var(--ink-700); }
+    .disc-filter-btn.active { color: white; }
+    .disc-filter-btn[data-filter="culture"].active   { background: var(--bordeaux);   border-color: var(--bordeaux); }
+    .disc-filter-btn[data-filter="gastro"].active    { background: var(--clay);        border-color: var(--clay); }
+    .disc-filter-btn[data-filter="rooftops"].active  { background: var(--pool);        border-color: var(--pool); }
+    .disc-filter-btn[data-filter="shopping"].active  { background: var(--saffron-600); border-color: var(--saffron-600); }
+    .disc-filter-btn[data-filter="nature"].active    { background: var(--olive);       border-color: var(--olive); }
+    .disc-filter-btn[data-filter="aventures"].active { background: var(--clay-600);    border-color: var(--clay-600); }
+
+    .disc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+    .disc-card {
+      background: white; border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(33,24,16,.055);
+      display: flex; flex-direction: column;
+      transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s;
+    }
+    .disc-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(33,24,16,.12);
+    }
+    .disc-bar { height: 4px; flex-shrink: 0; }
+    .disc-body { padding: 22px 24px 24px; flex: 1; display: flex; flex-direction: column; }
+    .disc-emoji { font-size: 1.7rem; line-height: 1; margin-bottom: 12px; }
+    .disc-cat {
+      font-family: var(--f-sans); font-size: .55rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 6px;
+    }
+    .disc-name {
+      font-family: var(--f-display);
+      font-size: 1.08rem; color: var(--ink-900);
+      margin-bottom: 10px; line-height: 1.25;
+    }
+    .disc-desc {
+      font-family: var(--f-serif); font-style: italic;
+      font-size: .86rem; color: var(--bordeaux);
+      line-height: 1.5; flex: 1;
+    }
+    .disc-footer {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid var(--sand-100);
+    }
+    .disc-tag {
+      font-family: var(--f-sans); font-size: .56rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      background: var(--sand-100); color: var(--sand-600);
+      padding: 4px 10px; border-radius: 100px; white-space: nowrap;
     }
 
     /* ============================================================
@@ -673,6 +764,8 @@
       .hero-content { padding-left: 22px; padding-right: 22px; }
       .section    { padding: 72px 0; }
       .act-grid   { grid-template-columns: 1fr; }
+      .disc-grid  { grid-template-columns: 1fr; }
+      .disc-filters { gap: 6px; }
       .wifi-card  { padding: 36px 28px; }
     }
 
@@ -1135,6 +1228,93 @@
     .res-wa-btn:hover { background: var(--bordeaux-700); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(110,34,48,.4); }
     .res-wa-btn:active { transform: none; }
     .res-note { font-size: .74rem; color: var(--sand-500); text-align: center; margin: 4px 0 0; font-family: var(--f-sans); }
+
+    /* ---- Bon de commande ---- */
+    .bon-overlay {
+      position: fixed; top: -9999px; left: -9999px;
+      display: flex; align-items: flex-start; justify-content: center;
+      width: 600px; z-index: -1;
+    }
+    .bon-box {
+      background: white; border-radius: 20px;
+      width: 100%; max-width: 540px;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    .bon-header {
+      background: var(--ink-900); padding: 28px 36px 24px;
+      text-align: center;
+    }
+    .bon-logo {
+      font-family: var(--f-display); font-size: 1.4rem;
+      letter-spacing: .28em; color: white; margin-bottom: 6px;
+    }
+    .bon-subtitle {
+      font-family: var(--f-sans); font-size: .65rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+    }
+    .bon-ref {
+      display: inline-block; margin-top: 14px;
+      font-family: var(--f-sans); font-size: .7rem;
+      letter-spacing: .12em; color: var(--saffron-200);
+      background: rgba(255,255,255,.08); border-radius: 100px;
+      padding: 4px 14px;
+    }
+    .bon-body { padding: 28px 36px; }
+    .bon-meta {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px 20px; margin-bottom: 24px;
+    }
+    .bon-meta-item { font-family: var(--f-sans); font-size: .8rem; color: var(--ink-700); }
+    .bon-meta-item strong { display: block; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sand-500); margin-bottom: 2px; }
+    .bon-divider { border: none; border-top: 1px solid var(--sand-100); margin: 18px 0; }
+    .bon-table { width: 100%; border-collapse: collapse; font-family: var(--f-sans); font-size: .82rem; }
+    .bon-table th { text-align: left; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sand-500); padding-bottom: 8px; border-bottom: 1px solid var(--sand-100); }
+    .bon-table th:last-child { text-align: right; }
+    .bon-table td { padding: 9px 0; border-bottom: 1px solid var(--sand-50); color: var(--ink-800); vertical-align: top; }
+    .bon-table td:last-child { text-align: right; font-family: var(--f-display); color: var(--clay); font-size: .9rem; }
+    .bon-table tr:last-child td { border-bottom: none; }
+    .bon-total-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-top: 18px; padding-top: 16px; border-top: 2px solid var(--ink-900);
+    }
+    .bon-total-label { font-family: var(--f-sans); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-700); }
+    .bon-total-amount { font-family: var(--f-display); font-size: 2rem; color: var(--ink-900); }
+    .bon-notice { font-family: var(--f-serif); font-size: .8rem; font-style: italic; color: var(--sand-500); margin-top: 14px; line-height: 1.5; }
+    .bon-actions {
+      display: flex; gap: 10px; padding: 20px 36px 28px;
+      border-top: 1px solid var(--sand-100);
+    }
+    .bon-btn-print {
+      flex: 1; padding: 13px; border-radius: 10px;
+      background: var(--ink-900); color: white; border: none;
+      font-family: var(--f-sans); font-size: .88rem; font-weight: 600;
+      cursor: pointer; transition: background .2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .bon-btn-print:hover { background: var(--bordeaux); }
+    .bon-btn-close {
+      padding: 13px 20px; border-radius: 10px;
+      background: var(--sand-50); color: var(--ink-700);
+      border: 1px solid var(--sand-200);
+      font-family: var(--f-sans); font-size: .88rem;
+      cursor: pointer; transition: background .2s;
+    }
+    .bon-btn-close:hover { background: var(--sand-100); }
+
+    /* Toast confirmation téléchargement */
+    .bon-toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--ink-900); color: white;
+      font-family: var(--f-sans); font-size: .88rem;
+      padding: 14px 24px; border-radius: 100px;
+      box-shadow: 0 8px 32px rgba(33,24,16,.25);
+      opacity: 0; transition: opacity .3s, transform .3s;
+      pointer-events: none; white-space: nowrap; z-index: 20000;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .bon-toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
     @media (max-width: 1100px) {
       .menu-layout { flex-direction: column; }
       .menu-book-side { width: 100%; }
@@ -1197,6 +1377,115 @@
     @media (max-width: 900px) {
       .act-bk-grid { grid-template-columns: 1fr; }
     }
+
+    /* ═══════════ REVIEWS SECTION ═══════════ */
+    .reviews-section {
+      background: var(--ink-900);
+      padding: 100px 0 88px;
+      overflow: hidden;
+      position: relative;
+    }
+    .rvw-grain {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='grvw'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grvw)'/%3E%3C/svg%3E");
+      opacity: .04;
+    }
+    .reviews-section .sec-eyebrow { color: var(--saffron-200); justify-content: center; }
+    .reviews-section .sec-eyebrow::before,
+    .reviews-section .sec-eyebrow::after { background: var(--saffron-200); }
+    .reviews-section .sec-title { color: white; text-align: center; }
+    .reviews-section .sec-head { text-align: center; margin-bottom: 12px; }
+    .rvw-inner { position: relative; z-index: 1; }
+
+    .rvw-airbnb-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 8px 18px;
+      margin-top: 20px;
+      margin-bottom: 52px;
+    }
+    .rvw-airbnb-logo { display: flex; align-items: center; }
+    .rvw-badge-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.2); }
+    .rvw-badge-score {
+      font-size: .93rem; font-weight: 600; color: white; letter-spacing: .01em;
+    }
+    .rvw-badge-stars { display: flex; gap: 2px; }
+    .rvw-badge-stars svg { width: 13px; height: 13px; fill: var(--saffron); }
+
+    .rvw-track-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .rvw-track-wrap::before,
+    .rvw-track-wrap::after {
+      content: '';
+      position: absolute; top: 0; bottom: 0; width: 120px;
+      z-index: 2; pointer-events: none;
+    }
+    .rvw-track-wrap::before { left: 0; background: linear-gradient(to right, var(--ink-900), transparent); }
+    .rvw-track-wrap::after  { right: 0; background: linear-gradient(to left,  var(--ink-900), transparent); }
+
+    .rvw-track {
+      display: flex; gap: 22px;
+      width: max-content;
+      padding: 12px 60px 24px;
+      animation: rvwScroll 90s linear infinite;
+    }
+    .rvw-track-wrap:hover .rvw-track { animation-play-state: paused; }
+    @keyframes rvwScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .rvw-card {
+      flex-shrink: 0; width: 300px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px;
+      padding: 22px 24px 24px;
+      transition: background .2s;
+    }
+    .rvw-card:hover { background: rgba(255,255,255,0.09); }
+    .rvw-card-top {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 14px;
+    }
+    .rvw-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      flex-shrink: 0; overflow: hidden;
+      background: var(--clay-600);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rvw-avatar img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .rvw-avatar-initials {
+      font-size: .9rem; font-weight: 700; color: white;
+      text-transform: uppercase; letter-spacing: .02em;
+    }
+    .rvw-name {
+      font-weight: 600; font-size: .93rem; color: white;
+      line-height: 1.2;
+    }
+    .rvw-meta {
+      font-size: .78rem; color: var(--sand-500);
+      margin-top: 1px;
+    }
+    .rvw-stars {
+      display: flex; gap: 3px; margin-bottom: 11px;
+    }
+    .rvw-stars svg { width: 14px; height: 14px; fill: var(--saffron); }
+    .rvw-text {
+      font-size: .87rem; color: var(--sand-300);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   </style>
 </head>
 
@@ -1232,6 +1521,16 @@
       </li>
       <li>
         <a href="#wifi">Wi-Fi</a>
+      </li>
+      <li>
+        <a href="#decouvrir">
+          <span class="t-fr">Découvrir</span><span class="t-en">Discover</span>
+        </a>
+      </li>
+      <li>
+        <a href="#avis">
+          <span class="t-fr">Avis</span><span class="t-en">Reviews</span>
+        </a>
       </li>
       <li>
         <button class="lang-btn" id="lang-btn" aria-label="Changer de langue">
@@ -1847,6 +2146,15 @@
             <div class="res-grand-total" id="resTotalAmount">0 €</div>
           </div>
 
+          <!-- RESPONSABLE -->
+          <div class="res-field">
+            <label class="res-lbl" for="resContact">
+              <span class="t-fr">Responsable de réservation *</span>
+              <span class="t-en">Booking contact *</span>
+            </label>
+            <input type="text" id="resContact" class="res-sel" placeholder="Prénom & Nom" style="background-image:none;">
+          </div>
+
           <!-- WHATSAPP -->
           <button type="button" class="res-wa-btn" onclick="resSendWa()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1963,10 +2271,9 @@
                 <div class="act-price-detail t-en">Airport · City · Agafay · Ourika · Essaouira · Ouzoud</div>
               </div>
               <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-                <button class="transport-info-btn" onclick="document.getElementById('transport-modal').classList.add('open')" aria-label="Voir les tarifs détaillés">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-                  </svg>
+                <button class="transport-info-btn" onclick="document.getElementById('transport-modal').classList.add('open')">
+                  <span class="t-fr">Consulter les prix</span>
+                  <span class="t-en">View pricing</span>
                 </button>
                 <div class="act-duration t-fr">Selon trajet</div>
                 <div class="act-duration t-en">Per journey</div>
@@ -2231,6 +2538,15 @@
               <div class="res-grand-total" id="actTotalAmount">—</div>
             </div>
 
+            <!-- RESPONSABLE -->
+            <div class="res-field">
+              <label class="res-lbl" for="actContact">
+                <span class="t-fr">Responsable de réservation *</span>
+                <span class="t-en">Booking contact *</span>
+              </label>
+              <input type="text" id="actContact" class="res-sel" placeholder="Prénom & Nom" style="background-image:none;">
+            </div>
+
             <button type="button" class="res-wa-btn" onclick="actSendWa()">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               <span class="t-fr">Envoyer via WhatsApp</span>
@@ -2266,11 +2582,22 @@
         <p class="sec-lead t-en">Connect to the house network with a single scan.</p>
       </div>
 
-      <div class="wifi-card rv">
-        <div class="qr-wrap">
-          <canvas id="qr-canvas"></canvas>
+      <div class="wifi-cards">
+        <div class="wifi-card rv">
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=172x172&data=WIFI%3AT%3AWPA%3BS%3AIndoor+Wifi%3BP%3AMarrakech2025%3B%3B&color=211810&bgcolor=ffffff&margin=0" alt="QR Code Indoor Wifi" width="172" height="172">
+          </div>
+          <div class="wifi-ssid">Indoor Wifi</div>
         </div>
-        <div class="wifi-ssid">Indoor Wifi</div>
+        <div class="wifi-card rv">
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=172x172&data=WIFI%3AT%3AWPA%3BS%3AGarden%3BP%3AMarrakech2025%3B%3B&color=211810&bgcolor=ffffff&margin=0" alt="QR Code Garden Wifi" width="172" height="172">
+          </div>
+          <div class="wifi-ssid">Garden</div>
+        </div>
+      </div>
+
+      <div class="wifi-shared rv">
         <p class="wifi-inst t-fr">Pointez l'appareil photo de votre téléphone sur le QR code pour vous connecter instantanément.</p>
         <p class="wifi-inst t-en">Point your phone camera at the QR code to connect instantly.</p>
         <ol class="wifi-steps">
@@ -2281,8 +2608,8 @@
           </li>
           <li>
             <span class="step-n">2</span>
-            <span class="t-fr">Pointez sur le QR code ci-dessus</span>
-            <span class="t-en">Point it at the QR code above</span>
+            <span class="t-fr">Pointez sur le QR code de votre réseau</span>
+            <span class="t-en">Point it at the QR code for your network</span>
           </li>
           <li>
             <span class="step-n">3</span>
@@ -2290,6 +2617,542 @@
             <span class="t-en">Accept the Wi-Fi connection prompt</span>
           </li>
         </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       DISCOVER MARRAKECH
+  ============================================================ -->
+  <section class="disc-section" id="decouvrir">
+    <div class="wrap">
+
+      <div class="sec-head rv">
+        <div class="sec-eyebrow t-fr">À Découvrir</div>
+        <div class="sec-eyebrow t-en">Explore</div>
+        <h2 class="sec-title t-fr">Marrakech</h2>
+        <h2 class="sec-title t-en">Marrakech</h2>
+        <p class="sec-lead t-fr">Nos coups de cœur pour explorer la ville — culture, gastronomie, shopping et sorties.</p>
+        <p class="sec-lead t-en">Our favourite spots to explore the city — culture, dining, shopping and nightlife.</p>
+      </div>
+
+      <div class="disc-filters rv">
+        <button class="disc-filter-btn" data-filter="culture">
+          <span class="t-fr">Culture</span><span class="t-en">Culture</span>
+        </button>
+        <button class="disc-filter-btn" data-filter="gastro">
+          <span class="t-fr">Restaurants</span><span class="t-en">Dining</span>
+        </button>
+        <button class="disc-filter-btn" data-filter="rooftops">
+          <span class="t-fr">Rooftops & Nightlife</span><span class="t-en">Rooftops & Nightlife</span>
+        </button>
+        <button class="disc-filter-btn" data-filter="shopping">
+          <span class="t-fr">Shopping</span><span class="t-en">Shopping</span>
+        </button>
+        <button class="disc-filter-btn" data-filter="nature">
+          <span class="t-fr">Nature & Bien-être</span><span class="t-en">Nature & Wellness</span>
+        </button>
+        <button class="disc-filter-btn" data-filter="aventures">
+          <span class="t-fr">Expériences</span><span class="t-en">Experiences</span>
+        </button>
+      </div>
+
+      <div class="disc-grid" id="disc-grid">
+
+        <!-- ── CULTURE ── -->
+        <div class="disc-card rv" data-cat="culture">
+          <div class="disc-bar" style="background:var(--bordeaux)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🌿</div>
+            <div class="disc-cat" style="color:var(--bordeaux)"><span class="t-fr">Culture & Histoire</span><span class="t-en">Culture & History</span></div>
+            <div class="disc-name t-fr">Jardin Majorelle & Musée YSL</div>
+            <div class="disc-name t-en">Majorelle Garden & YSL Museum</div>
+            <p class="disc-desc t-fr">Bleu cobalt iconique, végétation tropicale et musée Yves Saint Laurent attenant — l'adresse incontournable de Marrakech. Prévoir 2h minimum.</p>
+            <p class="disc-desc t-en">Iconic cobalt blue, tropical greenery and the adjacent Yves Saint Laurent museum — Marrakech's must-visit address. Allow at least 2 hours.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Guéliz</span>
+              <span class="disc-tag t-fr">Entrée payante</span><span class="disc-tag t-en">Paid entry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="culture">
+          <div class="disc-bar" style="background:var(--bordeaux)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🕌</div>
+            <div class="disc-cat" style="color:var(--bordeaux)"><span class="t-fr">Culture & Histoire</span><span class="t-en">Culture & History</span></div>
+            <div class="disc-name t-fr">Médersa Ben Youssef</div>
+            <div class="disc-name t-en">Ben Youssef Medersa</div>
+            <p class="disc-desc t-fr">Plus grande école coranique du Maghreb. Zellige, stuc sculpté et cèdre ciselé — l'un des plus beaux intérieurs architecturaux de la ville.</p>
+            <p class="disc-desc t-en">The Maghreb's largest Koranic school. Zellige, carved stucco and cedarwood — one of the city's most breathtaking interiors.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina</span><span class="disc-tag t-en">Medina</span>
+              <span class="disc-tag t-fr">Entrée payante</span><span class="disc-tag t-en">Paid entry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="culture">
+          <div class="disc-bar" style="background:var(--bordeaux)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🏛️</div>
+            <div class="disc-cat" style="color:var(--bordeaux)"><span class="t-fr">Culture & Histoire</span><span class="t-en">Culture & History</span></div>
+            <div class="disc-name t-fr">Tombeaux Saadiens</div>
+            <div class="disc-name t-en">Saadian Tombs</div>
+            <p class="disc-desc t-fr">Mausolées du XVIe siècle redécouverts en 1917, cachés derrière la Kasbah. Architecture hispano-mauresque d'une rare élégance.</p>
+            <p class="disc-desc t-en">16th-century mausoleums rediscovered in 1917, hidden behind the Kasbah. Rare Hispano-Moorish architecture in pristine condition.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Kasbah</span>
+              <span class="disc-tag t-fr">Entrée payante</span><span class="disc-tag t-en">Paid entry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="culture">
+          <div class="disc-bar" style="background:var(--bordeaux)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🏯</div>
+            <div class="disc-cat" style="color:var(--bordeaux)"><span class="t-fr">Culture & Histoire</span><span class="t-en">Culture & History</span></div>
+            <div class="disc-name t-fr">Palais de la Bahia</div>
+            <div class="disc-name t-en">Bahia Palace</div>
+            <p class="disc-desc t-fr">Palais du XIXe siècle aux jardins luxuriants et salles richement ornementées. Un exemple saisissant de l'architecture palatiale marocaine.</p>
+            <p class="disc-desc t-en">19th-century palace with lush gardens and richly adorned halls. A striking example of Moroccan palatial architecture.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina</span><span class="disc-tag t-en">Medina</span>
+              <span class="disc-tag t-fr">Entrée payante</span><span class="disc-tag t-en">Paid entry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="culture">
+          <div class="disc-bar" style="background:var(--bordeaux)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🎨</div>
+            <div class="disc-cat" style="color:var(--bordeaux)"><span class="t-fr">Culture & Histoire</span><span class="t-en">Culture & History</span></div>
+            <div class="disc-name t-fr">Musée des Confluences</div>
+            <div class="disc-name t-en">Museum of Confluences</div>
+            <p class="disc-desc t-fr">Installé dans le magnifique Dar el Bacha, ce musée célèbre l'artisanat marocain sur bois et accueille des expositions temporaires d'exception.</p>
+            <p class="disc-desc t-en">Housed in the magnificent Dar el Bacha palace, this museum celebrates Moroccan woodcraft and hosts outstanding temporary exhibitions.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina</span><span class="disc-tag t-en">Medina</span>
+              <span class="disc-tag t-fr">Entrée payante</span><span class="disc-tag t-en">Paid entry</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── RESTAURANTS & GASTRONOMIE ── -->
+        <div class="disc-card rv" data-cat="gastro">
+          <div class="disc-bar" style="background:var(--clay)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">👑</div>
+            <div class="disc-cat" style="color:var(--clay)"><span class="t-fr">Restaurants</span><span class="t-en">Dining</span></div>
+            <div class="disc-name t-fr">La Grande Table Marocaine</div>
+            <div class="disc-name t-en">La Grande Table Marocaine</div>
+            <p class="disc-desc t-fr">Table étoilée du Royal Mansour, la référence absolue du fine dining marocain. Cadre palais, service imperial, cuisine d'exception.</p>
+            <p class="disc-desc t-en">The Michelin-starred jewel of Royal Mansour — the absolute benchmark of Moroccan fine dining. Palace setting, imperial service, exceptional cuisine.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Royal Mansour</span>
+              <span class="disc-tag t-fr">Luxe · Réservation obligatoire</span><span class="disc-tag t-en">Luxury · Reservation required</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="gastro">
+          <div class="disc-bar" style="background:var(--clay)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🌹</div>
+            <div class="disc-cat" style="color:var(--clay)"><span class="t-fr">Restaurants</span><span class="t-en">Dining</span></div>
+            <div class="disc-name t-fr">Le Marocain — La Mamounia</div>
+            <div class="disc-name t-en">Le Marocain — La Mamounia</div>
+            <p class="disc-desc t-fr">Restaurant gastronomique marocain niché dans les jardins légendaires de La Mamounia. Cuisine raffinée, décor fastueux, expérience hors du commun.</p>
+            <p class="disc-desc t-en">Gastronomic Moroccan restaurant nestled in La Mamounia's legendary gardens. Refined cuisine, lavish décor, an extraordinary experience.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">La Mamounia</span>
+              <span class="disc-tag t-fr">Luxe · Réservation conseillée</span><span class="disc-tag t-en">Luxury · Reservation advised</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="gastro">
+          <div class="disc-bar" style="background:var(--clay)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🏮</div>
+            <div class="disc-cat" style="color:var(--clay)"><span class="t-fr">Restaurants</span><span class="t-en">Dining</span></div>
+            <div class="disc-name t-fr">Dar Yacout</div>
+            <div class="disc-name t-en">Dar Yacout</div>
+            <p class="disc-desc t-fr">Riad gastronomique mythique de la médina. Zelliges, fontaines, bougies et cuisine marocaine de tradition — un dîner qui tient de la mise en scène.</p>
+            <p class="disc-desc t-en">Mythical gastronomic riad in the Medina. Zellige, fountains, candlelight and traditional Moroccan cuisine — a dinner that feels like theatre.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Mi-luxe</span><span class="disc-tag t-en">Medina · Mid-luxury</span>
+              <span class="disc-tag t-fr">Réservation conseillée</span><span class="disc-tag t-en">Reservation advised</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="gastro">
+          <div class="disc-bar" style="background:var(--clay)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🍋</div>
+            <div class="disc-cat" style="color:var(--clay)"><span class="t-fr">Restaurants</span><span class="t-en">Dining</span></div>
+            <div class="disc-name t-fr">Le Foundouk</div>
+            <div class="disc-name t-en">Le Foundouk</div>
+            <p class="disc-desc t-fr">Riad du XIVe siècle restauré avec goût. Cuisine marocaine revisitée, patio central éclairé aux bougies — l'équilibre parfait entre authenticité et modernité.</p>
+            <p class="disc-desc t-en">A tastefully restored 14th-century riad. Modern take on Moroccan cuisine, candlelit central patio — the perfect balance of authenticity and contemporary flair.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Mid-range</span><span class="disc-tag t-en">Medina · Mid-range</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="gastro">
+          <div class="disc-bar" style="background:var(--clay)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🫙</div>
+            <div class="disc-cat" style="color:var(--clay)"><span class="t-fr">Restaurants</span><span class="t-en">Dining</span></div>
+            <div class="disc-name">Nomad</div>
+            <p class="disc-desc t-fr">Cuisine marocaine contemporaine au cœur de la médina — ingrédients locaux, recettes revisitées, terrasse vue souks. L'adresse qui a redéfini le genre.</p>
+            <p class="disc-desc t-en">Contemporary Moroccan cuisine in the heart of the Medina — local ingredients, reinvented recipes, souk-view terrace. The address that redefined the genre.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Accessible</span><span class="disc-tag t-en">Medina · Accessible</span>
+              <span class="disc-tag t-fr">Réservation conseillée</span><span class="disc-tag t-en">Reservation advised</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ROOFTOPS & NIGHTLIFE ── -->
+        <div class="disc-card rv" data-cat="rooftops">
+          <div class="disc-bar" style="background:var(--pool)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🌅</div>
+            <div class="disc-cat" style="color:var(--pool-700)"><span class="t-fr">Rooftops & Nightlife</span><span class="t-en">Rooftops & Nightlife</span></div>
+            <div class="disc-name">Dardar Rooftop</div>
+            <p class="disc-desc t-fr">Lanternes marocaines, DJ au coucher du soleil, cocktails sur les toits. L'adresse sunset par excellence — ambiance festive sans club.</p>
+            <p class="disc-desc t-en">Moroccan lanterns, sunset DJ sets, cocktails above the Medina rooftops. The go-to sunset address — festive atmosphere without the club.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Sunset · DJ</span><span class="disc-tag t-en">Medina · Sunset · DJ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="rooftops">
+          <div class="disc-bar" style="background:var(--pool)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🏔️</div>
+            <div class="disc-cat" style="color:var(--pool-700)"><span class="t-fr">Rooftops & Nightlife</span><span class="t-en">Rooftops & Nightlife</span></div>
+            <div class="disc-name">Le Salama</div>
+            <p class="disc-desc t-fr">7ème étage, vue dégagée sur l'Atlas et les toits ocres de la médina. Le meilleur rooftop pour l'heure dorée — arriver avant 18h30.</p>
+            <p class="disc-desc t-en">7th floor, unobstructed views over the Atlas and the Medina's ochre rooftops. The best rooftop for golden hour — arrive before 6:30 pm.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Vue Atlas</span><span class="disc-tag t-en">Medina · Atlas view</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="rooftops">
+          <div class="disc-bar" style="background:var(--pool)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🕌</div>
+            <div class="disc-cat" style="color:var(--pool-700)"><span class="t-fr">Rooftops & Nightlife</span><span class="t-en">Rooftops & Nightlife</span></div>
+            <div class="disc-name">El Fenn Rooftop</div>
+            <p class="disc-desc t-fr">1 300 m² de terrasse avec vue imprenable sur la Koutoubia. L'un des rooftops les plus élégants de la ville — bar, piscine et ambiance boutique hôtel.</p>
+            <p class="disc-desc t-en">1,300 m² terrace with a stunning view of the Koutoubia. One of the city's most elegant rooftops — bar, pool and boutique-hotel atmosphere.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Vue Koutoubia</span><span class="disc-tag t-en">Medina · Koutoubia view</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="rooftops">
+          <div class="disc-bar" style="background:var(--pool)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🍹</div>
+            <div class="disc-cat" style="color:var(--pool-700)"><span class="t-fr">Rooftops & Nightlife</span><span class="t-en">Rooftops & Nightlife</span></div>
+            <div class="disc-name">Kechmara</div>
+            <p class="disc-desc t-fr">Galerie d'art le jour, bar à cocktails créatifs en soirée. Clientèle locale bobo, terrasse animée — le spot le plus « inside » de Guéliz.</p>
+            <p class="disc-desc t-en">Art gallery by day, creative cocktail bar by night. Local bobo crowd, lively terrace — Gueliz's most "in the know" spot.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Guéliz</span>
+              <span class="disc-tag t-fr">Bar · Cocktails</span><span class="disc-tag t-en">Bar · Cocktails</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="rooftops">
+          <div class="disc-bar" style="background:var(--pool)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🎭</div>
+            <div class="disc-cat" style="color:var(--pool-700)"><span class="t-fr">Rooftops & Nightlife</span><span class="t-en">Rooftops & Nightlife</span></div>
+            <div class="disc-name">Le Theatro</div>
+            <p class="disc-desc t-fr">Club mythique installé dans un ancien théâtre. Architecture spectaculaire, soirées à thème, DJ internationaux — l'incontournable de la nuit marrakchie.</p>
+            <p class="disc-desc t-en">Iconic club in a former theatre. Spectacular architecture, themed nights, international DJs — the cornerstone of Marrakech nightlife.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Hivernage</span>
+              <span class="disc-tag t-fr">Club · Nuit</span><span class="disc-tag t-en">Club · Night</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SHOPPING ── -->
+        <div class="disc-card rv" data-cat="shopping">
+          <div class="disc-bar" style="background:var(--saffron)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🛍️</div>
+            <div class="disc-cat" style="color:var(--saffron-600)"><span class="t-fr">Shopping & Artisanat</span><span class="t-en">Shopping & Craft</span></div>
+            <div class="disc-name t-fr">Souk Semmarine</div>
+            <div class="disc-name t-en">Souk Semmarine</div>
+            <p class="disc-desc t-fr">Cœur battant des souks de Marrakech : métal, bois ciselé, tissu, bijoux, babouches. Se perdre dans les 18 souks reste l'expérience phare de la ville.</p>
+            <p class="disc-desc t-en">The beating heart of Marrakech's souks: metal, carved wood, fabric, jewellery, babouches. Getting lost in the 18 souks remains the city's defining experience.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Gratuit</span><span class="disc-tag t-en">Medina · Free</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="shopping">
+          <div class="disc-bar" style="background:var(--saffron)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🧶</div>
+            <div class="disc-cat" style="color:var(--saffron-600)"><span class="t-fr">Shopping & Artisanat</span><span class="t-en">Shopping & Craft</span></div>
+            <div class="disc-name t-fr">Tanneries de Chouara</div>
+            <div class="disc-name t-en">Chouara Tanneries</div>
+            <p class="disc-desc t-fr">Voir les bassins de teinture en cuir depuis les terrasses des maroquineries — spectacle visuel unique à Marrakech. Idéalement le matin.</p>
+            <p class="disc-desc t-en">Watch the leather dyeing vats from tannery shop terraces — a visual spectacle unique to Marrakech. Ideally visited in the morning.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Accès libre</span><span class="disc-tag t-en">Medina · Free access</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="shopping">
+          <div class="disc-bar" style="background:var(--saffron)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🌶️</div>
+            <div class="disc-cat" style="color:var(--saffron-600)"><span class="t-fr">Shopping & Artisanat</span><span class="t-en">Shopping & Craft</span></div>
+            <div class="disc-name t-fr">Souk Attarine & Rahba Kedima</div>
+            <div class="disc-name t-en">Souk Attarine & Rahba Kedima</div>
+            <p class="disc-desc t-fr">Épices, plantes médicinales, savons beldi et herbes rares — les deux adresses incontournables pour ramener l'essence de Marrakech chez soi.</p>
+            <p class="disc-desc t-en">Spices, medicinal plants, beldi soaps and rare herbs — the two essential spots for bringing the essence of Marrakech home.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Épices</span><span class="disc-tag t-en">Medina · Spices</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="shopping">
+          <div class="disc-bar" style="background:var(--saffron)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🪴</div>
+            <div class="disc-cat" style="color:var(--saffron-600)"><span class="t-fr">Shopping & Artisanat</span><span class="t-en">Shopping & Craft</span></div>
+            <div class="disc-name">MORO</div>
+            <p class="disc-desc t-fr">Concept store haut de gamme près de la rue Yves Saint Laurent. Vêtements de designers marocains, bougies, bijoux et objets lifestyle dans un patio végétalisé.</p>
+            <p class="disc-desc t-en">Upscale concept store near Rue Yves Saint Laurent. Moroccan designers, candles, jewellery and lifestyle objects in a lush courtyard setting.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Guéliz</span>
+              <span class="disc-tag t-fr">Concept store</span><span class="disc-tag t-en">Concept store</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="shopping">
+          <div class="disc-bar" style="background:var(--saffron)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🫙</div>
+            <div class="disc-cat" style="color:var(--saffron-600)"><span class="t-fr">Shopping & Artisanat</span><span class="t-en">Shopping & Craft</span></div>
+            <div class="disc-name">Chabi Chic</div>
+            <p class="disc-desc t-fr">Boutique d'inspiration marocaine alliant artisanat local et design contemporain : vaisselle, bougies, tasses Beldi, senteurs maison — idéal pour les cadeaux.</p>
+            <p class="disc-desc t-en">Moroccan-inspired boutique blending local craft and contemporary design: tableware, candles, Beldi cups, home fragrances — perfect for gifts.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Guéliz</span>
+              <span class="disc-tag t-fr">Artisanat contemporain</span><span class="disc-tag t-en">Contemporary craft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── NATURE & BIEN-ÊTRE ── -->
+        <div class="disc-card rv" data-cat="nature">
+          <div class="disc-bar" style="background:var(--olive)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🧖</div>
+            <div class="disc-cat" style="color:var(--olive-700)"><span class="t-fr">Nature & Bien-être</span><span class="t-en">Nature & Wellness</span></div>
+            <div class="disc-name t-fr">Hammam El Bacha</div>
+            <div class="disc-name t-en">Hammam El Bacha</div>
+            <p class="disc-desc t-fr">Le plus célèbre hammam traditionnel de Marrakech, fréquenté par les habitants depuis des siècles. Gommage au savon beldi, kessa — rituel authentique à prix doux.</p>
+            <p class="disc-desc t-en">Marrakech's most celebrated traditional hammam, frequented by locals for centuries. Beldi soap scrub, kessa — an authentic ritual at affordable prices.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Dès 5€</span><span class="disc-tag t-en">Medina · From €5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="nature">
+          <div class="disc-bar" style="background:var(--olive)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">💆</div>
+            <div class="disc-cat" style="color:var(--olive-700)"><span class="t-fr">Nature & Bien-être</span><span class="t-en">Nature & Wellness</span></div>
+            <div class="disc-name t-fr">Les Bains de Marrakech</div>
+            <div class="disc-name t-en">Les Bains de Marrakech</div>
+            <p class="disc-desc t-fr">Spa hammam semi-luxe dans la médina : enveloppements au rhassoul, massages aux huiles essentielles, ambiance tamisée. Le juste milieu entre authenticité et confort.</p>
+            <p class="disc-desc t-en">Semi-luxury spa hammam in the Medina: rhassoul wraps, essential oil massages, intimate ambiance. The perfect balance between authenticity and comfort.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · 30€ → 80€</span><span class="disc-tag t-en">Medina · €30 → €80</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="nature">
+          <div class="disc-bar" style="background:var(--olive)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🌳</div>
+            <div class="disc-cat" style="color:var(--olive-700)"><span class="t-fr">Nature & Bien-être</span><span class="t-en">Nature & Wellness</span></div>
+            <div class="disc-name t-fr">Jardins de la Ménara</div>
+            <div class="disc-name t-en">Ménara Gardens</div>
+            <p class="disc-desc t-fr">Bassin historique du XIIe siècle entouré d'une oliveraie millénaire, avec l'Atlas en toile de fond. La promenade idéale en fin d'après-midi.</p>
+            <p class="disc-desc t-en">Historic 12th-century basin surrounded by a centuries-old olive grove, with the Atlas as backdrop. The ideal late-afternoon stroll.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">3 km du centre · Gratuit</span><span class="disc-tag t-en">3 km from centre · Free</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="nature">
+          <div class="disc-bar" style="background:var(--olive)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🌊</div>
+            <div class="disc-cat" style="color:var(--olive-700)"><span class="t-fr">Nature & Bien-être</span><span class="t-en">Nature & Wellness</span></div>
+            <div class="disc-name t-fr">Vallée de l'Ourika</div>
+            <div class="disc-name t-en">Ourika Valley</div>
+            <p class="disc-desc t-fr">1h de route : villages berbères, cascades, paysages de l'Atlas. Déjeuner au bord de la rivière avec les pieds dans l'eau — dépaysement total à 40 km.</p>
+            <p class="disc-desc t-en">1h drive: Berber villages, waterfalls, Atlas landscapes. Lunch by the river with your feet in the water — total escape just 40 km away.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">40 km · Excursion journée</span><span class="disc-tag t-en">40 km · Full-day trip</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="nature">
+          <div class="disc-bar" style="background:var(--olive)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">⛰️</div>
+            <div class="disc-cat" style="color:var(--olive-700)"><span class="t-fr">Nature & Bien-être</span><span class="t-en">Nature & Wellness</span></div>
+            <div class="disc-name t-fr">Imlil & Haut Atlas</div>
+            <div class="disc-name t-en">Imlil & High Atlas</div>
+            <p class="disc-desc t-fr">Village de montagne à 1 740 m d'altitude, point de départ des treks vers le Toubkal. Villages d'altitude, air pur, panoramas saisissants — à 65 km de Marrakech.</p>
+            <p class="disc-desc t-en">Mountain village at 1,740m, gateway to Toubkal treks. High-altitude villages, crisp air, breathtaking panoramas — just 65 km from Marrakech.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">65 km · Trek · Altitude</span><span class="disc-tag t-en">65 km · Trek · Altitude</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── EXPÉRIENCES & AVENTURES ── -->
+        <div class="disc-card rv" data-cat="aventures">
+          <div class="disc-bar" style="background:var(--clay-600)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🎈</div>
+            <div class="disc-cat" style="color:var(--clay-800)"><span class="t-fr">Expériences & Aventures</span><span class="t-en">Experiences & Adventures</span></div>
+            <div class="disc-name t-fr">Montgolfière au lever du soleil</div>
+            <div class="disc-name t-en">Hot-air balloon at sunrise</div>
+            <p class="disc-desc t-fr">Décoller à l'aube au-dessus de la palmeraie et des dunes d'Agafay — vue aérienne sur Marrakech et l'Atlas. L'une des expériences les plus mémorables du séjour.</p>
+            <p class="disc-desc t-en">Take off at dawn above the palm grove and Agafay dunes — aerial views of Marrakech and the Atlas. One of the most memorable experiences of any stay.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Palmeraie · Aube · 3–4h</span><span class="disc-tag t-en">Palmeraie · Dawn · 3–4h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="aventures">
+          <div class="disc-bar" style="background:var(--clay-600)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🐴</div>
+            <div class="disc-cat" style="color:var(--clay-800)"><span class="t-fr">Expériences & Aventures</span><span class="t-en">Experiences & Adventures</span></div>
+            <div class="disc-name t-fr">Calèche dans la médina</div>
+            <div class="disc-name t-en">Horse-drawn carriage in the Medina</div>
+            <p class="disc-desc t-fr">Tour en calèche depuis la place Jemaa el-Fna autour des remparts de la médina. Entrée classique et romantique dans Marrakech — idéale à l'arrivée ou au coucher du soleil.</p>
+            <p class="disc-desc t-en">Carriage ride from Jemaa el-Fna along the Medina ramparts. A classic, romantic introduction to Marrakech — ideal on arrival or at sunset.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Jemaa el-Fna · 1h · Budget</span><span class="disc-tag t-en">Jemaa el-Fna · 1h · Budget</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="aventures">
+          <div class="disc-bar" style="background:var(--clay-600)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">👨‍🍳</div>
+            <div class="disc-cat" style="color:var(--clay-800)"><span class="t-fr">Expériences & Aventures</span><span class="t-en">Experiences & Adventures</span></div>
+            <div class="disc-name t-fr">Atelier de cuisine marocaine</div>
+            <div class="disc-name t-en">Moroccan cooking class</div>
+            <p class="disc-desc t-fr">Tajine, couscous, pastilla — initiation avec un chef local dans un riad. Format matinée : visite du marché, session cuisine et déjeuner inclus.</p>
+            <p class="disc-desc t-en">Tajine, couscous, pastilla — hands-on with a local chef in a riad. Morning format: market visit, cooking session and lunch included.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Médina · Demi-journée</span><span class="disc-tag t-en">Medina · Half-day</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="aventures">
+          <div class="disc-bar" style="background:var(--clay-600)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">✨</div>
+            <div class="disc-cat" style="color:var(--clay-800)"><span class="t-fr">Expériences & Aventures</span><span class="t-en">Experiences & Adventures</span></div>
+            <div class="disc-name">Palais Jad Mahal</div>
+            <p class="disc-desc t-fr">Dîner-spectacle dans un riad-palais fastueux de l'Hivernage. Danses orientales, musique live, décor opulent — une soirée digne des Mille et Une Nuits.</p>
+            <p class="disc-desc t-en">Dinner show in a sumptuous Hivernage palace-riad. Oriental dance, live music, opulent décor — an evening straight out of the Arabian Nights.</p>
+            <div class="disc-footer">
+              <span class="disc-tag">Hivernage</span>
+              <span class="disc-tag t-fr">Dîner-spectacle · Luxe</span><span class="disc-tag t-en">Dinner show · Luxury</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disc-card rv" data-cat="aventures">
+          <div class="disc-bar" style="background:var(--clay-600)"></div>
+          <div class="disc-body">
+            <div class="disc-emoji">🥁</div>
+            <div class="disc-cat" style="color:var(--clay-800)"><span class="t-fr">Expériences & Aventures</span><span class="t-en">Experiences & Adventures</span></div>
+            <div class="disc-name t-fr">Festival des Arts Populaires</div>
+            <div class="disc-name t-en">Festival of Popular Arts</div>
+            <p class="disc-desc t-fr">Chaque juillet, la place Jemaa el-Fna se transforme en scène géante. Musiques, danses et artistes du monde entier — l'un des festivals les plus vibrants du Maroc.</p>
+            <p class="disc-desc t-en">Every July, Jemaa el-Fna transforms into a giant stage. Music, dance and artists from around the world — one of Morocco's most vibrant festivals.</p>
+            <div class="disc-footer">
+              <span class="disc-tag t-fr">Juillet · Jemaa el-Fna</span><span class="disc-tag t-en">July · Jemaa el-Fna</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /disc-grid -->
+    </div>
+  </section>
+
+  <!-- ============================================================
+       REVIEWS SECTION
+  ============================================================ -->
+  <section class="reviews-section" id="avis">
+    <div class="rvw-grain"></div>
+    <div class="rvw-inner">
+      <div class="wrap" style="text-align:center;">
+        <div class="sec-head">
+          <div class="sec-eyebrow"><span class="t-fr">Avis vérifiés Airbnb</span><span class="t-en">Verified Airbnb Reviews</span></div>
+          <h2 class="sec-title"><span class="t-fr">Ils nous ont fait confiance</span><span class="t-en">They trusted us</span></h2>
+        </div>
+        <div class="rvw-airbnb-badge">
+          <span class="rvw-airbnb-logo">
+            <svg width="16" height="16" viewBox="0 0 32 32" fill="#FF5A5F" xmlns="http://www.w3.org/2000/svg"><path d="M16 1C7.729 1 1 7.729 1 16s6.729 15 15 15 15-6.729 15-15S24.271 1 16 1zm0 27.27C8.68 28.27 2.73 22.32 2.73 15S8.68 1.73 16 1.73 29.27 8.68 29.27 16 23.32 28.27 16 28.27zm5.04-18.34c-2.14 0-3.52 1.18-4.18 1.97-.5-.64-1.74-1.97-4-1.97-2.6 0-4.86 2.17-4.86 5.38 0 3.44 2.24 5.98 8.12 10.26.27.19.63.19.9 0 5.88-4.28 8.12-6.82 8.12-10.26 0-3.21-2.26-5.38-4.86-5.38h-.24zM16 24.8c-5.1-3.84-7.57-6.12-7.57-9.16 0-2.12 1.44-3.65 3.13-3.65 2.05 0 3.22 1.61 3.22 1.61.23.33.77.33 1 0 0 0 1.17-1.61 3.22-1.61 1.69 0 3.13 1.53 3.13 3.65 0 3.04-2.47 5.32-7.57 9.16h.44z"/></svg>
+          </span>
+          <span style="font-size:.82rem;font-weight:600;color:#FF5A5F;letter-spacing:.03em">Airbnb</span>
+          <span class="rvw-badge-sep"></span>
+          <span class="rvw-badge-stars">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+          <span class="rvw-badge-score">5,0 · 23 avis</span>
+        </div>
+      </div>
+      <div class="rvw-track-wrap">
+        <div class="rvw-track" id="rvwTrack"></div>
       </div>
     </div>
   </section>
@@ -2317,10 +3180,27 @@
     </div>
   </footer>
 
-  <!-- QR code library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-
   <script>
+    /* --- Discover filter --- */
+    (function() {
+      var defaultCat = 'culture';
+      document.querySelectorAll('.disc-card').forEach(function(card) {
+        card.style.display = card.dataset.cat === defaultCat ? '' : 'none';
+      });
+      var defaultBtn = document.querySelector('.disc-filter-btn[data-filter="' + defaultCat + '"]');
+      if (defaultBtn) defaultBtn.classList.add('active');
+      document.querySelectorAll('.disc-filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var filter = this.dataset.filter;
+          document.querySelectorAll('.disc-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+          this.classList.add('active');
+          document.querySelectorAll('.disc-card').forEach(function(card) {
+            card.style.display = card.dataset.cat === filter ? '' : 'none';
+          });
+        });
+      });
+    })();
+
     /* --- Language toggle --- */
     const body = document.body;
     document.getElementById('lang-btn').addEventListener('click', function() {
@@ -2468,21 +3348,7 @@
       sync();
     })();
 
-    /* --- QR Code --- */
-    try {
-      QRCode.toCanvas(
-        document.getElementById('qr-canvas'),
-        'WIFI:T:WPA;S:Indoor Wifi;P:Marrakech2025;;',
-        {
-          width: 172,
-          margin: 2,
-          color: { dark: '#211810', light: '#ffffff' }
-        },
-        function(err) { if (err) console.warn('QR:', err); }
-      );
-    } catch(e) { console.warn('QRCode non chargé:', e); }
-
-    /* ── RESERVATION PANEL ── */
+/* ── RESERVATION PANEL ── */
     var resGuests = { adults: 0, children: 0 };
 
     function resAdj(who, d) {
@@ -2519,6 +3385,8 @@
     function resSendWa() {
       var a = resGuests.adults, c = resGuests.children;
       if (a + c === 0) { alert('Veuillez ajouter au moins un convive.'); return; }
+      var contact = document.getElementById('resContact').value.trim();
+      if (!contact) { alert('Veuillez indiquer le responsable de réservation.'); return; }
       var dateEl = document.getElementById('resDate');
       if (!dateEl.value) { alert('Veuillez choisir une date.'); return; }
       var dp = dateEl.value.split('-');
@@ -2535,6 +3403,7 @@
       var fcLbl = pc === 8  ? 'Formule Complète (8 €/enf.)'  : 'Formule Partielle (6 €/enf.)';
       var grand = a * pa + c * pc;
       var msg = '🍽 *Réservation Marrakanda*\n\n';
+      msg += '👤 *Responsable :* ' + contact + '\n';
       msg += '📅 Date : ' + dateStr + '\n\n';
       msg += '👥 *Convives :*\n';
       if (a > 0) msg += '  • ' + a + ' adulte' + (a > 1 ? 's' : '') + ' — ' + faLbl + '\n';
@@ -2545,9 +3414,77 @@
       if (c > 0 && platEnf) msg += '  • Plat enfant : ' + platEnf + '\n';
       if (dessert) msg += '  • Dessert : ' + dessert + '\n';
       msg += '\n💰 *Total estimé : ' + grand + ' €*\n_(Boissons non incluses)_';
-      // ← Remplacez par votre numéro WhatsApp (sans +, sans espaces, ex: 212612345678)
-      var phone = '212XXXXXXXXX';
-      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+      var phone = '212684118819';
+      window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(msg), '_blank');
+
+      // Bon de commande
+      var bonLines = [];
+      if (a > 0) bonLines.push({ label: 'Restauration adulte', detail: a + ' pers. — ' + faLbl, price: ta + ' €' });
+      if (c > 0) bonLines.push({ label: 'Restauration enfant', detail: c + ' enf. — ' + fcLbl, price: tc + ' €' });
+      if (entree)  bonLines.push({ label: 'Entrée', detail: entree, price: '—' });
+      if (plat)    bonLines.push({ label: 'Plat', detail: plat, price: '—' });
+      if (c > 0 && platEnf) bonLines.push({ label: 'Plat enfant', detail: platEnf, price: '—' });
+      if (dessert) bonLines.push({ label: 'Dessert', detail: dessert, price: '—' });
+      showBon({
+        contact: contact,
+        type: 'Restauration',
+        date: dateStr,
+        total: grand + ' €',
+        lines: bonLines,
+        note: 'Boissons non incluses.'
+      });
+    }
+
+    // ---- Bon de commande ----
+    function genRef() {
+      return 'MRK-' + Math.random().toString(36).substr(2,6).toUpperCase();
+    }
+
+    function fmtToday() {
+      var d = new Date();
+      return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+    }
+
+    function showBonToast() {
+      var t = document.getElementById('bonToast');
+      t.classList.add('visible');
+      setTimeout(function() { t.classList.remove('visible'); }, 4000);
+    }
+
+    function showBon(data) {
+      var ref = genRef();
+      document.getElementById('bonRef').textContent = '#' + ref;
+      document.getElementById('bonEmission').textContent = fmtToday();
+      document.getElementById('bonContact').textContent = data.contact;
+      document.getElementById('bonType').textContent = data.type;
+      document.getElementById('bonDate').textContent = data.date || '—';
+      document.getElementById('bonTotal').textContent = data.total;
+
+      var lines = '';
+      data.lines.forEach(function(l) {
+        lines += '<tr><td>' + l.label + '</td><td style="color:#8a7a6a;font-size:.76rem;">' + l.detail + '</td><td>' + l.price + '</td></tr>';
+      });
+      document.getElementById('bonLines').innerHTML = lines;
+      document.getElementById('bonNotice').textContent = (data.note ? data.note + ' — ' : '') + 'Réservation sous réserve de confirmation. Nous vous contacterons sous 24h.';
+
+      // Rendre visible le temps du rendu, hors écran
+      var overlay = document.getElementById('bonOverlay');
+      var box = document.getElementById('bonBox');
+      overlay.style.cssText = 'display:flex;opacity:0;pointer-events:none;';
+
+      setTimeout(function() {
+        var opt = {
+          margin: [8, 8, 8, 8],
+          filename: 'Bon-Commande-' + ref + '.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(box).save().then(function() {
+          overlay.style.cssText = '';
+          showBonToast();
+        });
+      }, 200);
     }
 
     // Date min = aujourd'hui
@@ -2678,6 +3615,8 @@
 
     function actSendWa() {
       if (actCart.length === 0) { alert('Ajoutez au moins une activité.'); return; }
+      var contact = document.getElementById('actContact').value.trim();
+      if (!contact) { alert('Veuillez indiquer le responsable de réservation.'); return; }
       var note = document.getElementById('actNote').value.trim();
       var sum = 0, hasRequest = false;
       actCart.forEach(function(item) {
@@ -2686,6 +3625,7 @@
       });
       var totalStr = hasRequest ? (sum > 0 ? sum + ' € + sur devis' : 'Sur devis') : sum + ' €';
       var msg = '🎯 *Réservation Activités — Marrakanda*\n\n';
+      msg += '👤 *Responsable :* ' + contact + '\n';
       msg += '🎪 *Activités :*\n';
       actCart.forEach(function(item) {
         var t = actItemTotal(item);
@@ -2699,8 +3639,25 @@
       msg += '\n💰 *Total estimé : ' + totalStr + '*';
       if (note) msg += '\n\n📝 ' + note;
       msg += '\n\n_Merci de nous confirmer la disponibilité._';
-      var phone = '212XXXXXXXXX';
-      window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+      var phone = '212684118819';
+      window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(msg), '_blank');
+
+      // Bon de commande
+      var bonLines = actCart.map(function(item) {
+        var t = actItemTotal(item);
+        var detail = item.guests + ' pers.';
+        if (item.key === 'agafay') detail += item.option === 'avec' ? ' · avec piscine' : ' · sans piscine';
+        if (item.date) detail += ' · ' + actFmtDate(item.date);
+        return { label: item.label, detail: detail, price: t !== null ? t + ' €' : 'Sur devis' };
+      });
+      showBon({
+        contact: contact,
+        type: 'Activités',
+        date: null,
+        total: totalStr,
+        lines: bonLines,
+        note: note || null
+      });
     }
   </script>
 
@@ -2781,6 +3738,7 @@
         <thead>
           <tr>
             <th><span class="t-fr">Destination</span><span class="t-en">Destination</span></th>
+            <th><span class="t-fr">Condition</span><span class="t-en">Condition</span></th>
             <th><span class="t-fr">8 places</span><span class="t-en">8 seats</span></th>
             <th><span class="t-fr">17 places</span><span class="t-en">17 seats</span></th>
           </tr>
@@ -2788,18 +3746,37 @@
         <tbody>
           <tr>
             <td><span class="t-fr">Aéroport</span><span class="t-en">Airport</span></td>
+            <td style="font-size:.78rem;color:var(--ink-700);"><span class="t-fr">Par trajet</span><span class="t-en">Per journey</span></td>
             <td>30 €</td><td>60 €</td>
           </tr>
           <tr>
             <td><span class="t-fr">Centre-ville</span><span class="t-en">City centre</span></td>
+            <td style="font-size:.78rem;color:var(--ink-700);"><span class="t-fr">Aller-Retour</span><span class="t-en">Round trip</span></td>
             <td>50 €</td><td>90 €</td>
           </tr>
-          <tr><td>Agafay</td><td>90 €</td><td>150 €</td></tr>
-          <tr><td>Ourika</td><td>90 €</td><td>150 €</td></tr>
-          <tr><td>Essaouira</td><td>170 €</td><td>210 €</td></tr>
-          <tr><td>Ouzoud</td><td>160 €</td><td>220 €</td></tr>
+          <tr>
+            <td>Agafay</td>
+            <td style="font-size:.78rem;color:var(--ink-700);"><span class="t-fr">Excursion</span><span class="t-en">Excursion</span></td>
+            <td>90 €</td><td>150 €</td>
+          </tr>
+          <tr>
+            <td>Ourika</td>
+            <td style="font-size:.78rem;color:var(--ink-700);"><span class="t-fr">Excursion</span><span class="t-en">Excursion</span></td>
+            <td>90 €</td><td>150 €</td>
+          </tr>
+          <tr>
+            <td>Essaouira</td>
+            <td style="font-size:.78rem;color:var(--ink-700);"><span class="t-fr">Excursion</span><span class="t-en">Excursion</span></td>
+            <td>170 €</td><td>210 €</td>
+          </tr>
+          <tr>
+            <td>Ouzoud</td>
+            <td style="font-size:.78rem;color:var(--ink-700);"><span class="t-fr">Excursion</span><span class="t-en">Excursion</span></td>
+            <td>160 €</td><td>220 €</td>
+          </tr>
           <tr>
             <td><span class="t-fr">Mise à disposition</span><span class="t-en">Full day hire</span></td>
+            <td style="font-size:.78rem;color:var(--ink-700);">9h – 20h</td>
             <td>90 €</td><td>140 €</td>
           </tr>
         </tbody>
@@ -2807,5 +3784,116 @@
     </div>
   </div>
 
+  <!-- BON DE COMMANDE -->
+  <div class="bon-overlay" id="bonOverlay">
+    <div class="bon-box" id="bonBox">
+      <div class="bon-header">
+        <div class="bon-logo">MARRAKANDA</div>
+        <div class="bon-subtitle">Maison d'hôtes · Marrakech</div>
+        <div class="bon-ref" id="bonRef">#MRK-000000</div>
+      </div>
+      <div class="bon-body">
+        <div class="bon-meta">
+          <div class="bon-meta-item"><strong>Responsable</strong><span id="bonContact">—</span></div>
+          <div class="bon-meta-item"><strong>Date d'émission</strong><span id="bonEmission">—</span></div>
+          <div class="bon-meta-item" id="bonDateWrap"><strong>Date souhaitée</strong><span id="bonDate">—</span></div>
+          <div class="bon-meta-item"><strong>Type</strong><span id="bonType">—</span></div>
+        </div>
+        <hr class="bon-divider">
+        <table class="bon-table">
+          <thead>
+            <tr>
+              <th>Désignation</th>
+              <th>Détail</th>
+              <th>Montant</th>
+            </tr>
+          </thead>
+          <tbody id="bonLines"></tbody>
+        </table>
+        <div class="bon-total-row">
+          <span class="bon-total-label">Total estimé</span>
+          <span class="bon-total-amount" id="bonTotal">0 €</span>
+        </div>
+        <p class="bon-notice" id="bonNotice">Réservation sous réserve de confirmation. Nous vous contacterons sous 24h.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast confirmation -->
+  <div class="bon-toast" id="bonToast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span class="t-fr">Bon de commande téléchargé</span>
+    <span class="t-en">Order form downloaded</span>
+  </div>
+
+  <script>
+  /* ═══ Reviews Carousel ═══ */
+  (function() {
+    var reviews = [
+      { name:"Oussama", photo:"https://a0.muscache.com/im/pictures/user/27645d1d-95f6-4de1-bc94-602c3e5cf126.jpg?im_w=240", date:"Avril 2026", stars:5, text:"La villa de Mohamed est exceptionnelle. Nous avons pu profiter d'un excellent week-end prolongé dans cette magnifique villa avec un immense jardin bien aménagé et une piscine tout aussi grande et agréable. L'intérieur de la villa est également exceptionnel avec un très bon mobilier, beaucoup d'espace et des salles de bains privatives dans chaque suite. Le service était au top. Le petit déjeuner est inclus et sur-mesure. Nous avons passé un incroyable séjour moi et mes amis. Merci à Mohamed et Ismail pour leur accueil, nous reviendrons très prochainement dans ce bien d'exception." },
+      { name:"Téo", photo:"https://a0.muscache.com/im/pictures/user/cf4a50ba-db49-44a5-9619-b3812e32a3d0.jpg?im_w=240", date:"Mai 2026", stars:5, text:"Juste MERCI pour tout ! De l'arrivée au départ tout à été parfait, Hassan, Ismail et Mohamed s'occupent de tout et à la perfection. La maison est magnifique et parfaitement propre. Si nous revenons au Maroc ça sera dans cette magnifique villa ! On recommande !" },
+      { name:"Charlene", photo:"https://a0.muscache.com/im/pictures/user/30819978-f630-41ff-a934-154a0a77b8c3.jpg?im_w=240", date:"Mai 2026", stars:5, text:"Une villa complètement identique aux photos, elle est splendide et immense ! Nous tenons sincèrement à remercier Mohamed, un hôte formidable, aux petits soins et super arrangeant ! Il a réalisé toutes nos courses avant notre arrivée, c'était un sacré confort. Ismaël s'est plié en quatre pour que notre séjour se déroule à merveille ! La cuisinière est talentueuse, ne vous privez surtout pas de ce service ! Nous avons mieux mangé à la villa qu'au restaurant, les petits déjeuners étaient copieux et tellement délicieux !" },
+      { name:"Helene", photo:null, date:"Avril 2026", stars:5, text:"Par où commencer ? Si j'avais pu mettre plus de 5 étoiles je l'aurais fait. La villa est magnifique, on en prend plein les yeux dès que la porte s'ouvre. Nous sommes venus en famille pour les 40 ans de mon mari, 6 adultes et 6 enfants. La maison est très spacieuse et joliment décorée. La piscine et son magnifique jardin fleuri sont incroyables. Un havre de paix excentré du centre ville au calme. Mohamed est un hôte accueillant et très réactif. Ismail et Djamila nous préparaient un somptueux petit déjeuner chaque matin. Le seul regret : ne pas être resté plus longtemps !" },
+      { name:"Gamal", photo:"https://a0.muscache.com/im/pictures/user/User/original/069b1770-347b-42bb-b29e-524556b9dcdd.jpeg?im_w=240", date:"Avril 2026", stars:5, text:"Cette villa a largement dépassé nos attentes ; ma famille a passé un agréable séjour ici, tout était propre et impeccable depuis notre arrivée jusqu'à notre départ. L'ensemble du personnel a été très sympathique et serviable tout au long du séjour. L'hôte Mohamed est très réactif. Merci à Mohamed, Ismail et Hassan pour leur merveilleux accueil, nous reviendrons certainement." },
+      { name:"Safouan", photo:"https://a0.muscache.com/im/pictures/user/User/original/63967aba-ecea-4f07-b2b7-f15126e57de5.jpeg?im_w=240", date:"Avril 2026", stars:5, text:"La meilleure expérience que j'ai vécue depuis des mois ! Mes amis et moi – nous étions 9 – avons reçu un accueil incroyablement chaleureux. L'hôte a même fait les courses pour nous avant notre arrivée. La villa est joliment décorée et très spacieuse, tout en restant facile à parcourir. Le jardin est immense avec une table de ping-pong, des canapés, des tables et des chaises longues. Un lieu que je recommande vivement à tous." },
+      { name:"Oussama", photo:"https://a0.muscache.com/im/pictures/user/27645d1d-95f6-4de1-bc94-602c3e5cf126.jpg?im_w=240", date:"Avril 2026", stars:5, text:"La villa de Mohamed est exceptionnelle. Nous avons pu profiter d'un excellent week-end prolongé dans cette magnifique villa avec un immense jardin bien aménagé et une piscine tout aussi grande et agréable." },
+      { name:"Florent", photo:"https://a0.muscache.com/im/pictures/user/User/original/87354fb5-1b47-4718-ad45-bd404173aaf2.jpeg?im_w=240", date:"Mars 2026", stars:5, text:"L'hôte et le personnel étaient vraiment très accueillants et dévoués à ce que tout se déroule le mieux possible. Ce fût une très belle expérience qui nous a tous ravis. Merci encore pour votre bienveillance et gentillesse." },
+      { name:"Ava", photo:null, date:"Mars 2026", stars:5, text:"Ce séjour a été incroyable. L'endroit était absolument magnifique, avec tant de plantes et de fleurs qui donnent une odeur incroyable à l'extérieur. La maison était extrêmement propre, avait tellement de commodités et était absolument époustouflante de l'intérieur. Mohamed a été le meilleur hôte que j'ai jamais rencontré. Je ne saurais trop recommander cet Airbnb, la plus belle propriété et la meilleure équipe qui a dépassé toutes nos attentes." },
+      { name:"Martin", photo:null, date:"Février 2026", stars:5, text:"Super séjour entre amis, merci à Mohamed et shoukran à notre grand ami Hassan ! Accueil chaleureux et disponible pendant notre séjour pour chaque requête. Le logement est magnifique, les photos sont identiques à la villa. Nous vous conseillons de séjourner ici si vous souhaitez passer un séjour inoubliable." },
+      { name:"Juan Pablo", photo:"https://a0.muscache.com/im/pictures/user/User/original/e4f36830-6d43-4ba9-937f-2ee5aac73417.jpeg?im_w=240", date:"Janvier 2026", stars:5, text:"Très bonne maison. Mohammed a été un excellent hôte. Je recommande beaucoup cette maison. Tout était très propre et le service était incroyable." },
+      { name:"Zinedine", photo:"https://a0.muscache.com/im/pictures/user/User/original/d5fcfa30-55c0-45c1-b99c-f7388109673f.jpeg?im_w=240", date:"Janvier 2026", stars:5, text:"Notre séjour a été irréprochable. Merci à la dame de ménage pour les petits déjeuners traditionnels, merci à Hassan le gardien, respectueux et très réactif. L'hôte Mohamed est très sympathique, réactif et respectueux. Merci pour ce séjour." },
+      { name:"Zineb", photo:null, date:"Janvier 2026", stars:5, text:"Un séjour inoubliable dans cette magnifique villa à Marrakech ! Mohamed l'hôte a été d'une gentillesse exceptionnelle, et Ismail le responsable a veillé à ce que tout soit parfait du début à la fin. Le gardien a également été très attentionné et disponible. La villa est spacieuse, bien équipée et correspondait parfaitement aux photos. Merci infiniment à toute l'équipe !" },
+      { name:"Hamza", photo:"https://a0.muscache.com/im/pictures/user/User/original/d12fa89c-0496-4e9b-aed5-e53f3ca8e121.jpeg?im_w=240", date:"Décembre 2025", stars:5, text:"Excellent séjour ! Le logement était très propre, confortable et parfaitement conforme à la description. L'emplacement est idéal, calme et pratique. La communication avec l'hôte a été fluide du début à la fin, avec un accueil chaleureux et professionnel. Mention spéciale pour le gardien, super sympa et toujours disponible. Bref, 5/5. Rien à reprocher." },
+      { name:"Salma", photo:null, date:"Novembre 2025", stars:5, text:"Un vrai coup de cœur ! La villa est splendide et spacieuse, encore plus belle que sur les photos, avec une piscine magnifique, des suites parfaites et de grands salons qui ont pu accueillir toute la famille. Mohamed est un hôte adorable, très réactif et attentionné. On s'y sent comme à la maison, mais en mieux ! Nous reviendrons sans hésiter et je recommande cette villa les yeux fermés." },
+      { name:"Ismael", photo:"https://a0.muscache.com/im/pictures/user/User/original/67dd9cce-d897-4530-9846-d6802a7b62da.jpeg?im_w=240", date:"Septembre 2025", stars:5, text:"Un immense merci à Simohamed et Salah pour ce séjour inoubliable dans leur magnifique villa à Marrakech. Tout était parfait ! Ils ont été incroyablement arrangeants, toujours à l'écoute et disponibles à tout moment. Un grand merci également à Hassan le gardien, aux cuisinières et à Zahira pour son hospitalité et sa bienveillance. Nous repartons avec de merveilleux souvenirs !" },
+      { name:"Andrés", photo:"https://a0.muscache.com/im/pictures/user/d18bddd2-1033-4bf5-95a2-253bf9b47d77.jpg?im_w=240", date:"Septembre 2025", stars:5, text:"J'ai passé un séjour formidable chez Mohammed. La maison est tout simplement splendide : spacieuse, lumineuse, décorée avec goût et parfaitement entretenue. L'emplacement est idéal : très sûr, calme et retiré, ce qui permet de profiter d'un cadre paisible et reposant. Je recommande vivement ce logement à tous ceux qui cherchent une expérience de qualité et un hôte attentif." },
+      { name:"Rachel", photo:"https://a0.muscache.com/im/pictures/user/User/original/6c902cc9-5aec-4c7e-8f6f-32da1e857a59.jpeg?im_w=240", date:"Août 2025", stars:5, text:"Mohamed et son personnel ont été extrêmement gentils et serviables avant et pendant notre séjour ! La villa, la piscine et le jardin sont magnifiques ! Tout problème que nous avons eu, ils sont venus tout de suite pour le résoudre. Le gardien et la femme de ménage étaient super sympas et serviables. Nous avons passé un incroyable séjour à la Villa Targaït ! Hautement recommandé." },
+      { name:"Dahbia", photo:"https://a0.muscache.com/im/pictures/user/User/original/c0b27573-e42a-48d6-865c-b17dbc97b07a.jpeg?im_w=240", date:"Août 2025", stars:5, text:"Un écrin de verdure et de tranquillité ! Superbe expérience au sein de cette villa. Le propriétaire et le personnel sont très accueillants et super disponibles. Les chambres sont très belles, confortables et surtout, très propres. Petits déjeuners copieux et super bons. Rapport qualité/prix +++. Je reviendrai en famille c'est sûr !" },
+      { name:"Najat", photo:"https://a0.muscache.com/im/pictures/user/d39c534f-f0db-4205-8f4a-775f1c4a95b2.jpg?im_w=240", date:"Juillet 2025", stars:5, text:"Nous sommes vraiment tristes de quitter cette très jolie villa avec sa grande piscine. Le personnel est très accueillant, voir exceptionnel. Notre hôte a été très réactif à nos demandes. Nous recommandons et reviendrons inshallah." },
+      { name:"Sanaa", photo:"https://a0.muscache.com/im/pictures/user/6c4d078f-7a2a-4cf6-9730-7ad22ce19e3e.jpg?im_w=240", date:"Juillet 2025", stars:5, text:"En un mot, super. Nous reviendrons certainement !" },
+      { name:"Achraf", photo:"https://a0.muscache.com/im/pictures/user/aab53e82-2afd-412b-a77e-5e0a3f35d4fa.jpg?im_w=240", date:"Juin 2025", stars:5, text:"Villa exceptionnelle qui a dépassé toutes mes attentes ! La propriété correspondait parfaitement aux photos et était encore meilleure en personne. Entièrement équipé avec tout ce dont vous avez besoin, piscine propre et magnifique jardin. Mohammed et le co-hôte Salahuddin ont été incroyablement réactifs et serviables tout au long de notre séjour. Un joyau absolu qui dépasse les attentes." },
+      { name:"Jonas", photo:"https://a0.muscache.com/im/pictures/user/User/original/019df23a-8f59-47ea-9242-d7537422a509.jpeg?im_w=240", date:"Mai 2025", stars:5, text:"J'ai passé un séjour dans la villa de Mohamed magnifique, tout était à disposition, une très belle maison grande spacieuse moderne, très belle villa avec un terrain magnifique, rien à dire c'était top, je recommande fortement, et encore merci !" },
+      { name:"Katie", photo:"https://a0.muscache.com/im/pictures/user/User/original/aad47f20-da25-4813-9b9f-40b8f9e27a9d.jpeg?im_w=240", date:"Mai 2026", stars:5, text:"10/10, incroyable séjour dans la villa de Mohammed. Les installations étaient incroyables, la piscine et le jardin étaient encore plus magnifiques que sur les photos. Mohammed et son équipe ont été très accueillants, arrangeants et amicaux. C'était un hôte fabuleux qui a répondu à toutes nos demandes, toujours joignable et prêt à aider." }
+    ];
+
+    function starsSVG(n) {
+      var s = '';
+      for (var i = 0; i < n; i++) {
+        s += '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+      }
+      return s;
+    }
+
+    function cardHTML(r) {
+      var avatarHTML;
+      if (r.photo) {
+        avatarHTML = '<img src="' + r.photo + '" alt="' + r.name + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+          + '<span class="rvw-avatar-initials" style="display:none">' + r.name.charAt(0) + '</span>';
+      } else {
+        avatarHTML = '<span class="rvw-avatar-initials">' + r.name.charAt(0) + '</span>';
+      }
+      return '<div class="rvw-card">'
+        + '<div class="rvw-card-top">'
+        + '<div class="rvw-avatar">' + avatarHTML + '</div>'
+        + '<div><div class="rvw-name">' + r.name + '</div><div class="rvw-meta">' + r.date + '</div></div>'
+        + '</div>'
+        + '<div class="rvw-stars">' + starsSVG(r.stars) + '</div>'
+        + '<p class="rvw-text">' + r.text + '</p>'
+        + '</div>';
+    }
+
+    var track = document.getElementById('rvwTrack');
+    if (track) {
+      var html = '';
+      // Render twice for infinite loop
+      for (var pass = 0; pass < 2; pass++) {
+        for (var i = 0; i < reviews.length; i++) {
+          html += cardHTML(reviews[i]);
+        }
+      }
+      track.innerHTML = html;
+    }
+  })();
+  </script>
 </body>
 </html>
